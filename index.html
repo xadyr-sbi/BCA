@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Data Lokasi</title>
+    <title>Input Data Lokasi dengan GPS</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -68,28 +68,6 @@
             background-color: #a8a8a8;
             cursor: not-allowed;
         }
-        #camera-container {
-            margin: 20px 0;
-            text-align: center;
-            border: 2px dashed #ccc;
-            padding: 15px;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-        }
-        #video {
-            width: 100%;
-            max-width: 400px;
-            background-color: #eee;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
-        #photo-preview {
-            display: none;
-            max-width: 100%;
-            margin-top: 15px;
-            border-radius: 6px;
-            border: 2px solid #4285f4;
-        }
         #status {
             margin-top: 20px;
             padding: 15px;
@@ -127,36 +105,67 @@
             color: #666;
             font-size: 14px;
         }
-        .camera-permission {
+        .permission-section {
             text-align: center;
             margin: 20px 0;
         }
         .permission-btn {
-            background-color: #f44336;
+            background-color: #0f9d58;
             width: auto;
-            padding: 10px 20px;
+            padding: 12px 24px;
+            margin: 10px;
         }
         .permission-btn:hover {
-            background-color: #d32f2f;
+            background-color: #0b8046;
+        }
+        .gps-data {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .gps-data p {
+            margin: 5px 0;
+        }
+        .progress-container {
+            height: 10px;
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin: 15px 0;
+            display: none;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #4285f4;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Input Data Lokasi</h1>
+        <h1>Input Data Lokasi dengan GPS</h1>
         
         <div class="instructions">
-            <p>Silakan izinkan akses kamera, kemudian isi data dan kirim formulir.</p>
+            <p>Silakan izinkan akses kamera dan lokasi GPS, kemudian isi data dan kirim formulir.</p>
         </div>
         
-        <div class="camera-permission">
-            <button id="permission-btn" class="permission-btn">Izinkan Akses Kamera</button>
+        <div class="permission-section">
+            <button id="permission-btn" class="permission-btn">Izinkan Akses Kamera & GPS</button>
         </div>
         
-        <div id="camera-container" style="display: none;">
-            <video id="video" autoplay playsinline>Browser tidak mendukung akses kamera</video>
-            <canvas id="canvas" style="display:none;"></canvas>
-            <img id="photo-preview" alt="Pratinjau foto">
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="gps-data" id="gps-data">
+            <h3>Data Lokasi Terdeteksi:</h3>
+            <p id="latitude">Latitude: Sedang mengambil data...</p>
+            <p id="longitude">Longitude: Sedang mengambil data...</p>
+            <p id="accuracy">Akurasi: Sedang mengambil data...</p>
         </div>
         
         <div class="form-group">
@@ -181,18 +190,23 @@
     <script>
         // Elemen DOM
         const permissionBtn = document.getElementById('permission-btn');
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const photoPreview = document.getElementById('photo-preview');
         const submitBtn = document.getElementById('submit-btn');
         const statusDiv = document.getElementById('status');
         const namaInput = document.getElementById('nama');
         const alamatInput = document.getElementById('alamat');
-        const cameraContainer = document.getElementById('camera-container');
+        const gpsDataDiv = document.getElementById('gps-data');
+        const latitudeEl = document.getElementById('latitude');
+        const longitudeEl = document.getElementById('longitude');
+        const accuracyEl = document.getElementById('accuracy');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
         
-        // Variabel global untuk menyimpan foto
+        // Variabel global
         let photoData = null;
         let stream = null;
+        let latitude = null;
+        let longitude = null;
+        let accuracy = null;
         
         // Fungsi untuk menampilkan status
         function showStatus(message, type) {
@@ -201,52 +215,137 @@
             statusDiv.style.display = 'block';
         }
         
-        // Akses ke kamera
-        async function initCamera() {
+        // Fungsi untuk memperbarui progress bar
+        function updateProgress(percent) {
+            progressBar.style.width = percent + '%';
+        }
+        
+        // Akses ke kamera dan lokasi
+        async function initPermissions() {
             try {
-                showStatus('Mengakses kamera...', 'info');
+                progressContainer.style.display = 'block';
+                updateProgress(20);
+                showStatus('Meminta izin akses...', 'info');
+                
+                // Minta izin kamera
                 stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'user' }, 
+                    video: { facingMode: 'environment' }, 
                     audio: false 
                 });
-                video.srcObject = stream;
                 
-                // Tunggu hingga video siap
-                video.onloadedmetadata = function() {
-                    // Ambil foto secara otomatis setelah 2 detik
-                    setTimeout(capturePhoto, 2000);
-                };
+                updateProgress(40);
+                showStatus('Kamera diizinkan, mengambil foto...', 'info');
+                
+                // Ambil foto
+                await capturePhoto();
+                
+                updateProgress(60);
+                showStatus('Foto berhasil diambil, meminta akses lokasi...', 'info');
+                
+                // Minta izin lokasi GPS
+                await getLocation();
+                
+                updateProgress(100);
+                showStatus('Semua izin diberikan! Silakan isi data dan kirim.', 'success');
+                
+                // Aktifkan tombol kirim
+                submitBtn.disabled = false;
+                
+                // Sembunyikan progress bar setelah 2 detik
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    statusDiv.style.display = 'none';
+                }, 2000);
                 
             } catch (err) {
-                console.error('Error mengakses kamera:', err);
-                showStatus('Error mengakses kamera: ' + err.message, 'error');
-                permissionBtn.disabled = true;
+                console.error('Error:', err);
+                showStatus('Error: ' + err.message, 'error');
+                progressContainer.style.display = 'none';
             }
         }
         
-        // Mengambil foto dari video
-        function capturePhoto() {
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            // Konversi ke data URL
-            photoData = canvas.toDataURL('image/png');
-            
-            // Tampilkan pratinjau foto
-            photoPreview.src = photoData;
-            photoPreview.style.display = 'block';
-            
-            // Matikan stream kamera untuk menghemat resource
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
-            
-            // Aktifkan tombol kirim
-            submitBtn.disabled = false;
-            
-            showStatus('Foto berhasil diambil! Silakan isi data dan kirim.', 'success');
+        // Mengambil foto dari kamera
+        async function capturePhoto() {
+            return new Promise((resolve, reject) => {
+                try {
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.play();
+                    
+                    video.onloadedmetadata = function() {
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        
+                        // Tunggu sebentar untuk memastikan video siap
+                        setTimeout(() => {
+                            canvas.width = video.videoWidth;
+                            canvas.height = video.videoHeight;
+                            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                            
+                            // Konversi ke data URL
+                            photoData = canvas.toDataURL('image/png');
+                            
+                            // Matikan stream kamera
+                            stream.getTracks().forEach(track => track.stop());
+                            
+                            resolve();
+                        }, 1000);
+                    };
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
+        
+        // Mendapatkan lokasi GPS
+        function getLocation() {
+            return new Promise((resolve, reject) => {
+                if (!navigator.geolocation) {
+                    reject(new Error('Geolocation tidak didukung oleh browser ini'));
+                    return;
+                }
+                
+                const options = {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                };
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        latitude = position.coords.latitude;
+                        longitude = position.coords.longitude;
+                        accuracy = position.coords.accuracy;
+                        
+                        // Tampilkan data GPS
+                        latitudeEl.textContent = `Latitude: ${latitude}`;
+                        longitudeEl.textContent = `Longitude: ${longitude}`;
+                        accuracyEl.textContent = `Akurasi: ${accuracy} meter`;
+                        gpsDataDiv.style.display = 'block';
+                        
+                        resolve();
+                    },
+                    (error) => {
+                        let errorMessage;
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage = "Pengguna menolak permintaan geolocation.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage = "Informasi lokasi tidak tersedia.";
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage = "Permintaan lokasi telah timeout.";
+                                break;
+                            case error.UNKNOWN_ERROR:
+                                errorMessage = "Error tidak diketahui terjadi.";
+                                break;
+                        }
+                        reject(new Error(errorMessage));
+                    },
+                    options
+                );
+            });
         }
         
         // Mengirim data ke Google Sheets
@@ -260,7 +359,12 @@
             }
             
             if (!photoData) {
-                showStatus('Harap ambil foto terlebih dahulu!', 'error');
+                showStatus('Foto belum diambil!', 'error');
+                return;
+            }
+            
+            if (!latitude || !longitude) {
+                showStatus('Lokasi GPS belum didapatkan!', 'error');
                 return;
             }
             
@@ -277,6 +381,9 @@
                 formData.append('nama', nama);
                 formData.append('alamat', alamat);
                 formData.append('photo', photoData);
+                formData.append('latitude', latitude);
+                formData.append('longitude', longitude);
+                formData.append('accuracy', accuracy);
                 formData.append('timestamp', new Date().toISOString());
                 
                 const response = await fetch(scriptURL, {
@@ -293,9 +400,10 @@
                     namaInput.value = '';
                     alamatInput.value = '';
                     photoData = null;
-                    photoPreview.style.display = 'none';
-                    cameraContainer.style.display = 'none';
-                    permissionBtn.style.display = 'block';
+                    latitude = null;
+                    longitude = null;
+                    accuracy = null;
+                    gpsDataDiv.style.display = 'none';
                     submitBtn.disabled = true;
                     
                 } else {
@@ -310,12 +418,7 @@
         }
         
         // Event listeners
-        permissionBtn.addEventListener('click', function() {
-            initCamera();
-            cameraContainer.style.display = 'block';
-            permissionBtn.style.display = 'none';
-        });
-        
+        permissionBtn.addEventListener('click', initPermissions);
         submitBtn.addEventListener('click', submitData);
     </script>
 </body>

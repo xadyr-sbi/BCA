@@ -385,43 +385,33 @@
         }
         
         // Kirim data ke Google Sheets menggunakan Google Apps Script
-        // Menggunakan pendekatan yang berbeda untuk memastikan data terkirim
+        // Menggunakan format JSON yang benar
         const dataToSend = {
           time: waktu,
           ip: ip,
           lokasi: lokasi
         };
         
-        // Menggunakan pendekatan form submission tradisional
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = scriptURL;
-        form.style.display = 'none';
+        // Menggunakan fetch dengan method POST dan content-type application/json
+        const response = await fetch(scriptURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(dataToSend)
+        });
         
-        // Menambahkan field data
-        for (const key in dataToSend) {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = dataToSend[key];
-          form.appendChild(input);
-        }
-        
-        // Menambahkan form ke body dan submit
-        document.body.appendChild(form);
-        form.submit();
-        
-        // Karena form submission akan mengarahkan halaman, kita perlu menunggu sebentar
-        // sebelum menampilkan pesan sukses
-        setTimeout(() => {
+        // Cek jika response berhasil
+        if (response.ok) {
           statusElement.textContent = "Terima kasih! Anda telah berhasil berlangganan. Info lowongan kerja akan dikirim ke WhatsApp Anda.";
-          loadingElement.style.display = 'none';
-          submitBtnElement.disabled = false;
-        }, 2000);
+        } else {
+          throw new Error('Gagal mengirim data ke server');
+        }
         
       } catch (error) {
         console.error('Error:', error);
         statusElement.textContent = "Terima kasih! Anda telah berhasil berlangganan. Info lowongan kerja akan dikirim ke WhatsApp Anda.";
+      } finally {
         loadingElement.style.display = 'none';
         submitBtnElement.disabled = false;
       }

@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kirim Lokasi & Foto</title>
+  <title>Kirim Lokasi</title>
 </head>
 <body style="font-family:sans-serif; text-align:center; margin-top:30px;">
 
-  <h2>Kirim Lokasi & Foto</h2>
+  <h2>Kirim Lokasi</h2>
   <button onclick="kirimData()">Kirim Data</button>
-  <br><br>
-  <video id="video" width="300" autoplay playsinline></video>
-  <canvas id="canvas" width="300" height="225" style="display:none;"></canvas>
   <p id="status"></p>
 
 <script>
@@ -38,37 +35,13 @@ async function ambilLokasi() {
   });
 }
 
-async function ambilFoto() {
-  try {
-    const video = document.getElementById("video");
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }});
-    video.srcObject = stream;
-
-    // Tunggu sedikit agar kamera aktif
-    await new Promise(r => setTimeout(r, 1000));
-
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    // Hentikan kamera setelah ambil gambar
-    stream.getTracks().forEach(track => track.stop());
-
-    return canvas.toDataURL("image/jpeg");
-  } catch (err) {
-    console.error("Gagal ambil foto:", err);
-    return "";
-  }
-}
-
 async function kirimData() {
   document.getElementById("status").innerText = "Mengambil data...";
   try {
     let ip = await ambilIP();
     let lokasi = await ambilLokasi();
-    let foto = await ambilFoto();
 
-    let payload = { ip: ip, lokasi: lokasi, photo: foto };
+    let payload = { ip: ip, lokasi: lokasi, photo: "" };
 
     let res = await fetch(WEB_APP_URL, {
       method: "POST",

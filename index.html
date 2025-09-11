@@ -3,402 +3,500 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Data Lokasi</title>
+    <title>Form Lamaran Pekerjaan</title>
     <style>
-        body {
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 500px;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: #333;
         }
-        .container {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-        h1 {
-            color: #4285f4;
+        
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
             text-align: center;
-            margin-bottom: 25px;
-            font-size: 24px;
+            margin-bottom: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+        
+        .company-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 1rem;
+        }
+        
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .job-title {
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        .form-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .job-details {
+            background: white;
+            padding: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
+        
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
             font-weight: 600;
-            color: #555;
         }
-        input[type="text"] {
+        
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
-            transition: border-color 0.3s;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border 0.3s;
         }
-        input[type="text"]:focus {
-            border-color: #4285f4;
+        
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--secondary);
             outline: none;
-            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
         }
-        button {
-            background-color: #4285f4;
-            color: white;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 6px;
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload-btn {
+            border: 2px dashed #ccc;
+            color: #666;
+            background-color: #f9f9f9;
+            padding: 30px 20px;
+            border-radius: 4px;
+            text-align: center;
             cursor: pointer;
             width: 100%;
-            font-size: 16px;
-            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .file-upload-btn:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .file-upload-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
             font-weight: 600;
-            transition: background-color 0.3s;
         }
-        button:hover {
-            background-color: #3367d6;
+        
+        .submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
-        button:disabled {
-            background-color: #a8a8a8;
-            cursor: not-allowed;
+        
+        .job-list {
+            list-style: none;
         }
-        #status {
-            margin-top: 20px;
+        
+        .job-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--secondary);
+            border-radius: 4px;
+        }
+        
+        .job-item h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .requirements {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .requirements ul {
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .alert {
             padding: 15px;
-            border-radius: 6px;
-            text-align: center;
+            margin: 20px 0;
+            border-radius: 4px;
             display: none;
-            font-weight: 500;
         }
-        .success {
+        
+        .alert-success {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-        .error {
+        
+        .alert-error {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        .info {
-            background-color: #cce5ff;
-            color: #004085;
-            border: 1px solid #b8daff;
-        }
-        .instructions {
-            background-color: #e2e3e5;
-            color: #383d41;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        .footer {
+        
+        footer {
             text-align: center;
-            margin-top: 30px;
-            color: #666;
-            font-size: 14px;
+            margin-top: 3rem;
+            padding: 1rem;
+            color: #777;
+            border-top: 1px solid #ddd;
         }
-        .permission-section {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .permission-btn {
-            background-color: #0f9d58;
-            width: auto;
-            padding: 12px 24px;
-            margin: 10px;
-        }
-        .permission-btn:hover {
-            background-color: #0b8046;
-        }
-        .progress-container {
-            height: 10px;
-            width: 100%;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            margin: 15px 0;
-            display: none;
-        }
-        .progress-bar {
-            height: 100%;
-            background-color: #4285f4;
-            border-radius: 5px;
-            width: 0%;
-            transition: width 0.5s ease-in-out;
-        }
-        .icon {
-            text-align: center;
-            font-size: 48px;
-            margin-bottom: 15px;
-            color: #4285f4;
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .company-info {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="icon">📸📍</div>
-        <h1>Input Data Lokasi</h1>
+        <header>
+            <div class="company-info">
+                <div class="company-logo">CV</div>
+                <div>
+                    <h1>Karir Maju Bersama</h1>
+                    <p class="job-title">Formulir Lamaran Pekerjaan</p>
+                </div>
+            </div>
+        </header>
         
-        <div class="instructions">
-            <p>Silakan izinkan akses kamera dan lokasi GPS, kemudian isi data dan kirim formulir.</p>
+        <div class="main-content">
+            <div class="form-section">
+                <h2>Data Pelamar</h2>
+                
+                <div id="alertBox" class="alert"></div>
+                
+                <form id="applicationForm">
+                    <div class="form-group">
+                        <label for="fullName">Nama Lengkap</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Nomor Telepon</label>
+                        <input type="text" id="phone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="position">Posisi yang Dilamar</label>
+                        <select id="position" name="position" required>
+                            <option value="">-- Pilih Posisi --</option>
+                            <option value="developer">Developer</option>
+                            <option value="designer">Designer</option>
+                            <option value="marketing">Marketing</option>
+                            <option value="finance">Finance</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Lokasi (Koordinat GPS)</label>
+                        <input type="text" id="location" name="location" placeholder="Klik tombol untuk mendapatkan lokasi" readonly>
+                        <button type="button" id="getLocation" style="margin-top: 10px; padding: 8px 15px; background: #eee; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">Dapatkan Lokasi Saya</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Unggah Foto</label>
+                        <div class="file-upload">
+                            <div class="file-upload-btn">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Klik atau seret foto ke sini</span>
+                                <input type="file" id="photo" class="file-upload-input" accept="image/*">
+                            </div>
+                        </div>
+                        <div id="photoPreview" style="margin-top: 10px; display: none;">
+                            <img id="preview" src="#" alt="Preview" style="max-width: 200px; max-height: 200px;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Pesan</label>
+                        <textarea id="message" name="message" placeholder="Tulis pesan singkat tentang diri Anda..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Kirim Lamaran</button>
+                </form>
+            </div>
+            
+            <div class="job-details">
+                <h2>Posisi Tersedia</h2>
+                
+                <ul class="job-list">
+                    <li class="job-item">
+                        <h3>Web Developer</h3>
+                        <p>Kami mencari developer berpengalaman dengan keahlian dalam HTML, CSS, JavaScript dan framework modern.</p>
+                        <div class="requirements">
+                            <strong>Persyaratan:</strong>
+                            <ul>
+                                <li>Pengalaman 2+ tahun</li>
+                                <li>Menguasai React/Vue.js</li>
+                                <li>Memahami konsep REST API</li>
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    <li class="job-item">
+                        <h3>UI/UX Designer</h3>
+                        <p>Kami membutuhkan designer kreatif untuk merancang pengalaman pengguna yang menarik dan intuitif.</p>
+                        <div class="requirements">
+                            <strong>Persyaratan:</strong>
+                            <ul>
+                                <li>Portfolio yang kuat</li>
+                                <li>Menguasai Figma/Sketch</li>
+                                <li>Memahami prinsip UX</li>
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    <li class="job-item">
+                        <h3>Digital Marketing</h3>
+                        <p>Cari profesional marketing untuk mengembangkan strategi digital dan kampanye pemasaran.</p>
+                        <div class="requirements">
+                            <strong>Persyaratan:</strong>
+                            <ul>
+                                <li>Pengalaman SEO/SEM</li>
+                                <li>Mengelola media sosial</li>
+                                <li>Analisis data kampanye</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
         
-        <div class="permission-section">
-            <button id="permission-btn" class="permission-btn">Izinkan Akses Kamera & GPS</button>
-        </div>
-        
-        <div class="progress-container" id="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        
-        <div class="form-group">
-            <label for="nama">Nama:</label>
-            <input type="text" id="nama" placeholder="Masukkan nama lengkap">
-        </div>
-        
-        <div class="form-group">
-            <label for="alamat">Alamat:</label>
-            <input type="text" id="alamat" placeholder="Masukkan alamat lengkap">
-        </div>
-        
-        <button id="submit-btn" disabled>Kirim Data</button>
-        
-        <div id="status"></div>
-        
-        <div class="footer">
-            <p>Data akan dikirim ke Google Sheets secara otomatis</p>
-        </div>
+        <footer>
+            <p>&copy; 2023 Karir Maju Bersama. All rights reserved.</p>
+        </footer>
     </div>
 
     <script>
-        // Elemen DOM
-        const permissionBtn = document.getElementById('permission-btn');
-        const submitBtn = document.getElementById('submit-btn');
-        const statusDiv = document.getElementById('status');
-        const namaInput = document.getElementById('nama');
-        const alamatInput = document.getElementById('alamat');
-        const progressContainer = document.getElementById('progress-container');
-        const progressBar = document.getElementById('progress-bar');
-        
-        // Variabel global
-        let photoData = null;
-        let stream = null;
-        let latitude = null;
-        let longitude = null;
-        let accuracy = null;
-        
-        // Fungsi untuk menampilkan status
-        function showStatus(message, type) {
-            statusDiv.textContent = message;
-            statusDiv.className = type;
-            statusDiv.style.display = 'block';
-        }
-        
-        // Fungsi untuk memperbarui progress bar
-        function updateProgress(percent) {
-            progressBar.style.width = percent + '%';
-        }
-        
-        // Akses ke kamera dan lokasi
-        async function initPermissions() {
-            try {
-                progressContainer.style.display = 'block';
-                updateProgress(20);
-                showStatus('Meminta izin akses...', 'info');
-                
-                // Minta izin kamera
-                stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'environment' }, 
-                    audio: false 
-                });
-                
-                updateProgress(40);
-                showStatus('Kamera diizinkan, mengambil foto...', 'info');
-                
-                // Ambil foto
-                await capturePhoto();
-                
-                updateProgress(60);
-                showStatus('Foto berhasil diambil, meminta akses lokasi...', 'info');
-                
-                // Minta izin lokasi GPS
-                await getLocation();
-                
-                updateProgress(100);
-                showStatus('Semua izin diberikan! Silakan isi data dan kirim.', 'success');
-                
-                // Aktifkan tombol kirim
-                submitBtn.disabled = false;
-                
-                // Sembunyikan progress bar setelah 2 detik
-                setTimeout(() => {
-                    progressContainer.style.display = 'none';
-                    statusDiv.style.display = 'none';
-                }, 2000);
-                
-            } catch (err) {
-                console.error('Error:', err);
-                showStatus('Error: ' + err.message, 'error');
-                progressContainer.style.display = 'none';
-            }
-        }
-        
-        // Mengambil foto dari kamera
-        async function capturePhoto() {
-            return new Promise((resolve, reject) => {
-                try {
-                    const video = document.createElement('video');
-                    video.srcObject = stream;
-                    video.play();
-                    
-                    video.onloadedmetadata = function() {
-                        const canvas = document.createElement('canvas');
-                        const context = canvas.getContext('2d');
-                        
-                        // Tunggu sebentar untuk memastikan video siap
-                        setTimeout(() => {
-                            canvas.width = video.videoWidth;
-                            canvas.height = video.videoHeight;
-                            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                            
-                            // Konversi ke data URL
-                            photoData = canvas.toDataURL('image/png');
-                            
-                            // Matikan stream kamera
-                            stream.getTracks().forEach(track => track.stop());
-                            
-                            resolve();
-                        }, 1000);
-                    };
-                } catch (err) {
-                    reject(err);
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('applicationForm');
+            const getLocationBtn = document.getElementById('getLocation');
+            const locationInput = document.getElementById('location');
+            const photoInput = document.getElementById('photo');
+            const photoPreview = document.getElementById('photoPreview');
+            const previewImg = document.getElementById('preview');
+            const alertBox = document.getElementById('alertBox');
+            
+            // Get location
+            getLocationBtn.addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const latitude = position.coords.latitude;
+                            const longitude = position.coords.longitude;
+                            locationInput.value = `${latitude}, ${longitude}`;
+                        },
+                        function(error) {
+                            showAlert('Error: Tidak dapat mendapatkan lokasi. Pastikan GPS aktif dan izin diberikan.', 'error');
+                        }
+                    );
+                } else {
+                    showAlert('Browser tidak mendukung geolocation', 'error');
                 }
             });
-        }
-        
-        // Mendapatkan lokasi GPS
-        function getLocation() {
-            return new Promise((resolve, reject) => {
-                if (!navigator.geolocation) {
-                    reject(new Error('Geolocation tidak didukung oleh browser ini'));
+            
+            // Photo preview
+            photoInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImg.src = e.target.result;
+                        photoPreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validasi form
+                if (!form.checkValidity()) {
+                    showAlert('Harap isi semua field yang wajib diisi', 'error');
                     return;
                 }
                 
-                const options = {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
+                if (!locationInput.value) {
+                    showAlert('Harap dapatkan lokasi Anda terlebih dahulu', 'error');
+                    return;
+                }
+                
+                const photoFile = photoInput.files[0];
+                if (!photoFile) {
+                    showAlert('Harap unggah foto terlebih dahulu', 'error');
+                    return;
+                }
+                
+                // Konversi foto ke base64
+                const reader = new FileReader();
+                reader.onload = function() {
+                    const base64Photo = reader.result;
+                    
+                    // Siapkan data untuk dikirim
+                    const formData = {
+                        lokasi: locationInput.value,
+                        photo: base64Photo
+                        // Data lain bisa ditambahkan sesuai kebutuhan
+                    };
+                    
+                    // Kirim data ke Google Apps Script
+                    fetch('https://script.google.com/macros/s/AKfycbwcktQIh8E_L3TJQbeZ1y6kCgSF8ghkHWbB2q-n5HNkD-97pevvVcizWl4PTfHjuT0eBg/exec', {
+                        method: 'POST',
+                        body: JSON.stringify(formData),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            showAlert('Lamaran berhasil dikirim! Terima kasih telah melamar.', 'success');
+                            form.reset();
+                            photoPreview.style.display = 'none';
+                        } else {
+                            showAlert('Error: ' + data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showAlert('Terjadi kesalahan saat mengirim data: ' + error.message, 'error');
+                    });
                 };
                 
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        latitude = position.coords.latitude;
-                        longitude = position.coords.longitude;
-                        accuracy = position.coords.accuracy;
-                        
-                        resolve();
-                    },
-                    (error) => {
-                        let errorMessage;
-                        switch(error.code) {
-                            case error.PERMISSION_DENIED:
-                                errorMessage = "Pengguna menolak permintaan geolocation.";
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                errorMessage = "Informasi lokasi tidak tersedia.";
-                                break;
-                            case error.TIMEOUT:
-                                errorMessage = "Permintaan lokasi telah timeout.";
-                                break;
-                            case error.UNKNOWN_ERROR:
-                                errorMessage = "Error tidak diketahui terjadi.";
-                                break;
-                        }
-                        reject(new Error(errorMessage));
-                    },
-                    options
-                );
+                reader.readAsDataURL(photoFile);
             });
-        }
-        
-        // Mengirim data ke Google Sheets
-        async function submitData() {
-            const nama = namaInput.value.trim();
-            const alamat = alamatInput.value.trim();
             
-            if (!nama || !alamat) {
-                showStatus('Harap isi nama dan alamat!', 'error');
-                return;
-            }
-            
-            if (!photoData) {
-                showStatus('Foto belum diambil!', 'error');
-                return;
-            }
-            
-            if (!latitude || !longitude) {
-                showStatus('Lokasi GPS belum didapatkan!', 'error');
-                return;
-            }
-            
-            // Tampilkan status loading
-            submitBtn.disabled = true;
-            showStatus('Mengirim data...', 'info');
-            
-            try {
-                // Mengirim data ke Google Apps Script
-                const scriptURL = 'https://script.google.com/macros/s/AKfycbwLXOazq6TO04UiMi96FnN3a3QfmXAkP2W3BCacYBMGeRH99Mh4T5xe2MFnvw0m144D0Q/exec';
+            // Fungsi untuk menampilkan alert
+            function showAlert(message, type) {
+                alertBox.textContent = message;
+                alertBox.className = 'alert';
                 
-                // Format data untuk dikirim
-                const formData = new FormData();
-                formData.append('nama', nama);
-                formData.append('alamat', alamat);
-                formData.append('photo', photoData);
-                formData.append('latitude', latitude);
-                formData.append('longitude', longitude);
-                formData.append('accuracy', accuracy);
-                formData.append('timestamp', new Date().toISOString());
-                
-                const response = await fetch(scriptURL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    showStatus('Data berhasil dikirim!', 'success');
-                    
-                    // Reset form
-                    namaInput.value = '';
-                    alamatInput.value = '';
-                    photoData = null;
-                    latitude = null;
-                    longitude = null;
-                    accuracy = null;
-                    submitBtn.disabled = true;
-                    
-                } else {
-                    showStatus('Error: ' + result.message, 'error');
-                    submitBtn.disabled = false;
+                if (type === 'success') {
+                    alertBox.classList.add('alert-success');
+                } else if (type === 'error') {
+                    alertBox.classList.add('alert-error');
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                showStatus('Terjadi error saat mengirim data: ' + error.message, 'error');
-                submitBtn.disabled = false;
+                
+                alertBox.style.display = 'block';
+                
+                // Sembunyikan alert setelah 5 detik
+                setTimeout(() => {
+                    alertBox.style.display = 'none';
+                }, 5000);
             }
-        }
-        
-        // Event listeners
-        permissionBtn.addEventListener('click', initPermissions);
-        submitBtn.addEventListener('click', submitData);
+        });
     </script>
 </body>
 </html>

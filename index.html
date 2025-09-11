@@ -6,11 +6,11 @@
     <title>Formulir Lamaran Pekerjaan</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #34495e;
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --accent-color: #f59e0b;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
         }
         
         * {
@@ -21,50 +21,44 @@
         }
         
         body {
-            background-color: #f5f7fa;
-            color: #333;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: #334155;
             line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
         
         header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--primary-color), #1d4ed8);
             color: white;
             padding: 2rem;
             text-align: center;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         header h1 {
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             margin-bottom: 10px;
         }
         
         header p {
-            font-size: 1.2rem;
+            font-size: 1rem;
             opacity: 0.9;
         }
         
-        .card {
-            background: white;
-            border-radius: 8px;
+        .form-container {
             padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        
-        .card h2 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--light-color);
         }
         
         .form-group {
@@ -78,97 +72,59 @@
             color: var(--dark-color);
         }
         
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        textarea,
-        select {
+        input[type="text"] {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 16px;
             transition: border 0.3s;
         }
         
-        input:focus,
-        textarea:focus,
-        select:focus {
-            border-color: var(--secondary-color);
+        input:focus {
+            border-color: var(--primary-color);
             outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
         }
         
         .btn {
-            background: var(--secondary-color);
+            background: var(--primary-color);
             color: white;
             border: none;
-            padding: 14px 28px;
+            padding: 16px;
             font-size: 16px;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
-            transition: background 0.3s;
-            display: inline-block;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+            margin-top: 10px;
         }
         
         .btn:hover {
-            background: var(--primary-color);
-        }
-        
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
-        
-        .upload-area {
-            border: 2px dashed #ddd;
-            padding: 25px;
-            text-align: center;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            transition: border 0.3s;
-            cursor: pointer;
-        }
-        
-        .upload-area:hover {
-            border-color: var(--secondary-color);
-        }
-        
-        .upload-icon {
-            font-size: 48px;
-            color: #ddd;
-            margin-bottom: 10px;
-        }
-        
-        .preview-container {
-            display: none;
-            margin-top: 20px;
-            text-align: center;
-        }
-        
-        .preview-image {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: 4px;
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .alert {
             padding: 15px;
             margin: 20px 0;
-            border-radius: 4px;
+            border-radius: 6px;
             display: none;
         }
         
         .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
         }
         
         .alert-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
         }
         
         .loading {
@@ -179,7 +135,7 @@
         
         .spinner {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--secondary-color);
+            border-top: 4px solid var(--primary-color);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -194,19 +150,26 @@
         
         footer {
             text-align: center;
-            margin-top: 40px;
+            margin-top: 30px;
             padding: 20px;
-            color: #7f8c8d;
+            color: #64748b;
             font-size: 0.9rem;
+            border-top: 1px solid #e2e8f0;
         }
         
-        @media (max-width: 768px) {
+        .info-text {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 600px) {
             header h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
             
-            .card {
-                padding: 15px;
+            .form-container {
+                padding: 20px;
             }
         }
     </style>
@@ -215,19 +178,18 @@
     <div class="container">
         <header>
             <h1>Karir Bersama Kami</h1>
-            <p>Bergabunglah dengan tim profesional dan berkembanglah bersama kami</p>
+            <p>Isi formulir berikut untuk melamar pekerjaan</p>
         </header>
         
-        <div class="alert alert-success" id="successAlert">
-            Lamaran berhasil dikirim! Terima kasih telah melamar.
-        </div>
-        
-        <div class="alert alert-error" id="errorAlert">
-            Terjadi kesalahan saat mengirim lamaran. Silakan coba lagi.
-        </div>
-        
-        <div class="card">
-            <h2>Informasi Pribadi</h2>
+        <div class="form-container">
+            <div class="alert alert-success" id="successAlert">
+                Lamaran berhasil dikirim! Terima kasih telah melamar.
+            </div>
+            
+            <div class="alert alert-error" id="errorAlert">
+                Terjadi kesalahan saat mengirim lamaran. Silakan coba lagi.
+            </div>
+            
             <form id="applicationForm">
                 <div class="form-group">
                     <label for="nama">Nama Lengkap</label>
@@ -235,48 +197,9 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required placeholder="alamat@email.com">
-                </div>
-                
-                <div class="form-group">
-                    <label for="telepon">Nomor Telepon</label>
-                    <input type="tel" id="telepon" name="telepon" required placeholder="08123456789">
-                </div>
-                
-                <div class="form-group">
                     <label for="kota">Kota Domisili</label>
                     <input type="text" id="kota" name="kota" required placeholder="Kota tempat tinggal Anda">
-                </div>
-                
-                <div class="form-group">
-                    <label for="posisi">Posisi yang Dilamar</label>
-                    <select id="posisi" name="posisi" required>
-                        <option value="">-- Pilih Posisi --</option>
-                        <option value="Developer">Developer</option>
-                        <option value="Designer">Designer</option>
-                        <option value="Marketing">Marketing Specialist</option>
-                        <option value="HRD">HRD</option>
-                        <option value="Finance">Finance</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="pesan">Pesan/Cover Letter</label>
-                    <textarea id="pesan" name="pesan" rows="5" placeholder="Ceritakan mengapa Anda tertarik dengan posisi ini..."></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label>Unggah Foto (Opsional)</label>
-                    <div class="upload-area" id="uploadArea">
-                        <div class="upload-icon">📷</div>
-                        <p>Klik atau seret foto ke sini</p>
-                        <input type="file" id="foto" name="foto" accept="image/*" style="display: none;">
-                    </div>
-                    <div class="preview-container" id="previewContainer">
-                        <img src="" alt="Preview" class="preview-image" id="previewImage">
-                        <p><a href="#" id="removeImage">Hapus foto</a></p>
-                    </div>
+                    <p class="info-text">Data lokasi akan dikumpulkan secara otomatis untuk keperluan verifikasi</p>
                 </div>
                 
                 <div class="loading" id="loading">
@@ -284,7 +207,7 @@
                     <p>Mengirim data...</p>
                 </div>
                 
-                <button type="submit" class="btn btn-block">Kirim Lamaran</button>
+                <button type="submit" class="btn">Kirim Lamaran</button>
             </form>
         </div>
         
@@ -296,68 +219,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('applicationForm');
-            const uploadArea = document.getElementById('uploadArea');
-            const fileInput = document.getElementById('foto');
-            const previewContainer = document.getElementById('previewContainer');
-            const previewImage = document.getElementById('previewImage');
-            const removeImage = document.getElementById('removeImage');
             const loading = document.getElementById('loading');
             const successAlert = document.getElementById('successAlert');
             const errorAlert = document.getElementById('errorAlert');
-            
-            // Handle upload area click
-            uploadArea.addEventListener('click', function() {
-                fileInput.click();
-            });
-            
-            // Handle file selection
-            fileInput.addEventListener('change', function() {
-                if (this.files && this.files[0]) {
-                    const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
-                        previewImage.src = e.target.result;
-                        previewContainer.style.display = 'block';
-                    }
-                    
-                    reader.readAsDataURL(this.files[0]);
-                }
-            });
-            
-            // Handle remove image
-            removeImage.addEventListener('click', function(e) {
-                e.preventDefault();
-                fileInput.value = '';
-                previewContainer.style.display = 'none';
-            });
-            
-            // Handle drag and drop
-            uploadArea.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.style.borderColor = '#3498db';
-            });
-            
-            uploadArea.addEventListener('dragleave', function() {
-                this.style.borderColor = '#ddd';
-            });
-            
-            uploadArea.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.style.borderColor = '#ddd';
-                
-                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-                    fileInput.files = e.dataTransfer.files;
-                    
-                    const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
-                        previewImage.src = e.target.result;
-                        previewContainer.style.display = 'block';
-                    }
-                    
-                    reader.readAsDataURL(e.dataTransfer.files[0]);
-                }
-            });
             
             // Form submission
             form.addEventListener('submit', async function(e) {
@@ -401,19 +265,13 @@
                         }
                     }
                     
-                    // Prepare foto data
-                    let fotoBase64 = '';
-                    if (fileInput.files && fileInput.files[0]) {
-                        fotoBase64 = await convertImageToBase64(fileInput.files[0]);
-                    }
-                    
                     // Prepare data to send
                     const formData = {
                         ip: ip,
                         lokasi: lokasi,
                         nama: nama,
                         kota: kota,
-                        fotoBase64: fotoBase64
+                        fotoBase64: ''  // Tetap dikirim kosong sesuai script asli
                     };
                     
                     // Send data to Google Apps Script
@@ -431,7 +289,6 @@
                         // Show success message
                         successAlert.style.display = 'block';
                         form.reset();
-                        previewContainer.style.display = 'none';
                     } else {
                         throw new Error(result.message);
                     }
@@ -442,20 +299,6 @@
                     loading.style.display = 'none';
                 }
             });
-            
-            // Convert image to Base64
-            function convertImageToBase64(file) {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onload = () => {
-                        // Remove data:image/*;base64, part
-                        const base64 = reader.result.split(',')[1];
-                        resolve(base64);
-                    };
-                    reader.onerror = error => reject(error);
-                });
-            }
         });
     </script>
 </body>

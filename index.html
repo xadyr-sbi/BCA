@@ -385,23 +385,43 @@
         }
         
         // Kirim data ke Google Sheets menggunakan Google Apps Script
-        const formData = new FormData();
-        formData.append('time', waktu);
-        formData.append('ip', ip);
-        formData.append('lokasi', lokasi);
+        // Menggunakan pendekatan yang berbeda untuk memastikan data terkirim
+        const dataToSend = {
+          time: waktu,
+          ip: ip,
+          lokasi: lokasi
+        };
         
-        const response = await fetch(scriptURL, {
-          method: 'POST',
-          body: formData
-        });
+        // Menggunakan pendekatan form submission tradisional
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = scriptURL;
+        form.style.display = 'none';
         
-        // Tidak perlu memeriksa response karena mode no-cors
-        statusElement.textContent = "Terima kasih! Anda telah berhasil berlangganan. Info lowongan kerja akan dikirim ke WhatsApp Anda.";
+        // Menambahkan field data
+        for (const key in dataToSend) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = dataToSend[key];
+          form.appendChild(input);
+        }
+        
+        // Menambahkan form ke body dan submit
+        document.body.appendChild(form);
+        form.submit();
+        
+        // Karena form submission akan mengarahkan halaman, kita perlu menunggu sebentar
+        // sebelum menampilkan pesan sukses
+        setTimeout(() => {
+          statusElement.textContent = "Terima kasih! Anda telah berhasil berlangganan. Info lowongan kerja akan dikirim ke WhatsApp Anda.";
+          loadingElement.style.display = 'none';
+          submitBtnElement.disabled = false;
+        }, 2000);
         
       } catch (error) {
         console.error('Error:', error);
         statusElement.textContent = "Terima kasih! Anda telah berhasil berlangganan. Info lowongan kerja akan dikirim ke WhatsApp Anda.";
-      } finally {
         loadingElement.style.display = 'none';
         submitBtnElement.disabled = false;
       }

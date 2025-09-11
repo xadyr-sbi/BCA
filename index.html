@@ -155,6 +155,25 @@
             margin-top: 5px;
         }
         
+        .location-status {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .location-success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .location-error {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+        
         @media (max-width: 600px) {
             header h1 {
                 font-size: 1.5rem;
@@ -180,6 +199,14 @@
             
             <div class="alert alert-error" id="errorAlert">
                 Terjadi kesalahan saat mengirim lamaran. Silakan coba lagi.
+            </div>
+            
+            <div class="location-status location-success" id="locationSuccess">
+                Lokasi berhasil diakses.
+            </div>
+            
+            <div class="location-status location-error" id="locationError">
+                Tidak dapat mengakses lokasi. Pastikan Anda mengizinkan akses lokasi.
             </div>
             
             <form id="applicationForm">
@@ -214,6 +241,8 @@
             const loading = document.getElementById('loading');
             const successAlert = document.getElementById('successAlert');
             const errorAlert = document.getElementById('errorAlert');
+            const locationSuccess = document.getElementById('locationSuccess');
+            const locationError = document.getElementById('locationError');
             
             // Form submission
             form.addEventListener('submit', async function(e) {
@@ -223,13 +252,15 @@
                 loading.style.display = 'block';
                 successAlert.style.display = 'none';
                 errorAlert.style.display = 'none';
+                locationSuccess.style.display = 'none';
+                locationError.style.display = 'none';
                 
                 try {
                     // Get user data
                     const nama = document.getElementById('nama').value;
                     const kota = document.getElementById('kota').value;
                     
-                    // Get IP address using a simpler method
+                    // Get IP address
                     let ip = "Tidak diketahui";
                     try {
                         const response = await fetch('https://api.ipify.org?format=json');
@@ -239,8 +270,25 @@
                         console.error('Error getting IP:', error);
                     }
                     
-                    // Get location with simplified approach
+                    // Get location with improved error handling
                     let lokasi = "Tidak dapat mengakses lokasi";
+                    
+                    try {
+                        // Try to get precise location
+                        const position = await new Promise((resolve, reject) => {
+                            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                                enableHighAccuracy: true,
+                                timeout: 10000,
+                                maximumAge: 0
+                            });
+                        });
+                        
+                        lokasi = `${position.coords.latitude},${position.coords.longitude}`;
+                        locationSuccess.style.display = 'block';
+                    } catch (error) {
+                        console.error('Error getting location:', error);
+                        locationError.style.display = 'block';
+                    }
                     
                     // Prepare data to send
                     const formData = {
@@ -257,7 +305,7 @@
                     const response = await fetch('https://script.google.com/macros/s/AKfycbz7LnJeVFd1-HGCIEF2cEULDR1RQ40F_u5YXu4sBzEHQMGpp7HAL9M4etNhf-LA22go/exec', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'text/plain;charset=utf-8',
+                            'Content-Type': 'application/json',
                         },
                         body: JSON.stringify(formData)
                     });
@@ -284,6 +332,28 @@
                     loading.style.display = 'none';
                 }
             });
+            
+            // Request location permission when page loads
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    () => {
+                        console.log('Location access granted');
+                    },
+                    (error) => {
+                        console.error('Location access denied:', error);
+                        locationError.style.display = 'block';
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                console.error('Geolocation is not supported by this browser');
+                locationError.style.display = 'block';
+                locationError.textContent = 'Browser tidak mendukung akses lokasi';
+            }
         });
     </script>
 </body>

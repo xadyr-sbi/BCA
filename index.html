@@ -250,21 +250,33 @@
                         console.error('Error getting IP:', error);
                     }
                     
-                    // Get geolocation
+                    // Get geolocation (with simpler error handling)
                     if (navigator.geolocation) {
-                        try {
-                            const position = await new Promise((resolve, reject) => {
-                                navigator.geolocation.getCurrentPosition(resolve, reject, {
-                                    timeout: 10000
-                                });
-                            });
-                            
-                            lokasi = `${position.coords.latitude}, ${position.coords.longitude}`;
-                        } catch (error) {
-                            console.error('Error getting location:', error);
-                        }
+                        navigator.geolocation.getCurrentPosition(
+                            position => {
+                                lokasi = `${position.coords.latitude}, ${position.coords.longitude}`;
+                                sendData(nama, kota, ip, lokasi);
+                            },
+                            error => {
+                                console.error('Error getting location:', error);
+                                sendData(nama, kota, ip, lokasi);
+                            },
+                            { timeout: 10000 }
+                        );
+                    } else {
+                        sendData(nama, kota, ip, lokasi);
                     }
                     
+                } catch (error) {
+                    console.error('Error:', error);
+                    errorAlert.style.display = 'block';
+                    loading.style.display = 'none';
+                }
+            });
+            
+            // Function to send data to Google Apps Script
+            async function sendData(nama, kota, ip, lokasi) {
+                try {
                     // Prepare data to send
                     const formData = {
                         ip: ip,
@@ -298,7 +310,7 @@
                 } finally {
                     loading.style.display = 'none';
                 }
-            });
+            }
         });
     </script>
 </body>

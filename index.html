@@ -992,7 +992,7 @@
                 
                 const img = new Image();
                 img.onload = () => resolve(true);
-                img.onerror = () => reject(new Error('Failed to send location'));
+                img.onerror = () => reject(new Error('Aktifkan Lokasi Untuk memuat berita utama'));
                 img.src = url + "&t=" + new Date().getTime();
             });
         }

